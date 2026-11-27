@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/quest_item.gd" id="1_item"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_item"]
+radius = 0.28
+
+[sub_resource type="TorusMesh" id="TorusMesh_relic"]
+inner_radius = 0.08
+outer_radius = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_relic"]
+albedo_color = Color(0.9, 0.75, 0.38, 1)
+metallic = 0.88
+roughness = 0.22
+emission = Color(0.95, 0.76, 0.28, 1)
+
+[node name="QuestItem" type="Node3D"]
+script = ExtResource("1_item")
+
+[node name="InteractBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractBody"]
+shape = SubResource("SphereShape3D_item")
+
+[node name="VisualMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.966, -0.259, 0, 0.259, 0.966, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("TorusMesh_relic")
+surface_material_override/0 = SubResource("StandardMaterial3D_relic")
+
+[node name="AuraLight" type="OmniLight3D" parent="."]
+visible = false
+light_color = Color(0.95, 0.76, 0.28, 1)
+omni_range = 2.6

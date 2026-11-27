@@ -1,0 +1,107 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/repair_workbench.gd" id="1_crucible"]
+[ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="2_stone"]
+[ext_resource type="Material" path="res://assets/materials/mat_wrought_iron.tres" id="3_iron"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="4_brass"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_crucible"]
+radius = 0.65
+height = 1.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pedestal"]
+top_radius = 0.45
+bottom_radius = 0.56
+height = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bowl"]
+top_radius = 0.58
+bottom_radius = 0.34
+height = 0.36
+
+[sub_resource type="TorusMesh" id="TorusMesh_rim"]
+inner_radius = 0.52
+outer_radius = 0.61
+
+[sub_resource type="SphereMesh" id="SphereMesh_embers"]
+radius = 0.34
+height = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_embers"]
+albedo_color = Color(0.9, 0.35, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.45, 0.12, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_orb"]
+radius = 0.14
+height = 0.28
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orb"]
+albedo_color = Color(1, 0.9, 0.48, 1)
+metallic = 0.4
+roughness = 0.15
+emission_enabled = true
+emission = Color(1, 0.84, 0.32, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_forge_spark"]
+material = SubResource("StandardMaterial3D_orb")
+radius = 0.03
+height = 0.06
+
+[node name="RepairWorkbench" type="Node3D"]
+script = ExtResource("1_crucible")
+
+[node name="InteractBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67, 0)
+shape = SubResource("CylinderShape3D_crucible")
+
+[node name="Pedestal" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+mesh = SubResource("CylinderMesh_pedestal")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+mesh = SubResource("CylinderMesh_bowl")
+surface_material_override/0 = ExtResource("3_iron")
+
+[node name="BrassRim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0)
+mesh = SubResource("TorusMesh_rim")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="Embers" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13, 0)
+mesh = SubResource("SphereMesh_embers")
+surface_material_override/0 = SubResource("StandardMaterial3D_embers")
+
+[node name="SealOrb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52, 0)
+visible = false
+mesh = SubResource("SphereMesh_orb")
+surface_material_override/0 = SubResource("StandardMaterial3D_orb")
+
+[node name="CrucibleLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+light_color = Color(0.95, 0.55, 0.2, 1)
+light_energy = 0.8
+shadow_enabled = true
+omni_range = 6.0
+
+[node name="ForgeParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+emitting = false
+amount = 36
+lifetime = 0.9
+one_shot = true
+explosiveness = 0.85
+mesh = SubResource("SphereMesh_forge_spark")
+direction = Vector3(0, 1, 0)
+spread = 55.0
+gravity = Vector3(0, -2.5, 0)
+initial_velocity_min = 1.4
+initial_velocity_max = 3.2
