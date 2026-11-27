@@ -25,9 +25,9 @@ func get_prompt() -> String:
 		GameManager.MissionState.TRAPPED_IN_ROOM2:
 			return "[LOCKED] Ward Seal Broken — Read the Enchanted Lectern"
 		GameManager.MissionState.MISSION_ACTIVE:
-			return "[LOCKED] Broken Lock — Collect Relics (%d/%d)" % [GameManager.collected_parts.size(), GameManager.TOTAL_PARTS]
+			return "[LOCKED] Complete the 4 Chamber Trials first"
 		GameManager.MissionState.PARTS_COLLECTED:
-			return "[LOCKED] Forge the Reparo Seal at the Crucible first"
+			return "[LOCKED] Visit the Sorting Hat Dais first"
 		GameManager.MissionState.SEAL_FORGED:
 			return "[E] Cast Reparo — Repair & Unlock Door"
 	return ""
@@ -49,16 +49,16 @@ func interact(_player: Node3D) -> void:
 			_rattle_locked_door()
 			GameManager.emit_signal(
 				"notification_requested",
-				"LOCK STILL BROKEN",
-				"You still need %d/3 Arcane Relics before you can forge the Reparo Seal." % [GameManager.collected_parts.size()],
+				"CHAMBER DOOR SEALED",
+				"Complete all 4 Chamber Trials step by step to unlock the Sorting Hat and open this door.",
 				Color(0.92, 0.55, 0.28)
 			)
 		GameManager.MissionState.PARTS_COLLECTED:
 			_rattle_locked_door()
 			GameManager.emit_signal(
 				"notification_requested",
-				"SEAL NOT YET FORGED",
-				"Take the 3 Relics to the Arcane Crucible in the East alcove first.",
+				"HOUSE SELECTION PENDING",
+				"Proceed to the Sorting Hat Dais at the North Altar first.",
 				Color(0.95, 0.78, 0.32)
 			)
 		GameManager.MissionState.SEAL_FORGED:

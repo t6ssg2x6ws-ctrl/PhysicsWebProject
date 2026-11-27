@@ -1,0 +1,90 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/orb_tint.gd" id="1_tint"]
+[ext_resource type="Material" path="res://assets/materials/mat_wrought_iron.tres" id="2_iron"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="3_brass"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_body"]
+radius = 0.54
+height = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pot"]
+top_radius = 0.44
+bottom_radius = 0.34
+height = 0.56
+
+[sub_resource type="TorusMesh" id="TorusMesh_rim"]
+inner_radius = 0.38
+outer_radius = 0.48
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leg"]
+top_radius = 0.04
+bottom_radius = 0.03
+height = 0.26
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ladle"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.58
+
+[sub_resource type="SphereMesh" id="SphereMesh_brew"]
+radius = 0.37
+height = 0.14
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brew_default"]
+albedo_color = Color(0.16, 0.85, 0.44, 1)
+roughness = 0.15
+emission_enabled = true
+emission = Color(0.16, 0.88, 0.44, 1)
+emission_energy_multiplier = 2.6
+
+[node name="PropGiantCauldron" type="Node3D"]
+script = ExtResource("1_tint")
+glow_color = Color(0.16, 0.88, 0.44, 1)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.475, 0)
+shape = SubResource("CylinderShape3D_body")
+
+[node name="Leg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0.28)
+mesh = SubResource("CylinderMesh_leg")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="Leg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0.13, -0.14)
+mesh = SubResource("CylinderMesh_leg")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="Leg3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.13, -0.14)
+mesh = SubResource("CylinderMesh_leg")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="PotBody" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+mesh = SubResource("CylinderMesh_pot")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="PotRim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("TorusMesh_rim")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="Ladle" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, 0.342, 0, -0.342, 0.94, 0, 0, 0, 1, 0.18, 0.85, 0)
+mesh = SubResource("CylinderMesh_ladle")
+surface_material_override/0 = ExtResource("3_brass")
+
+[node name="GlowTarget" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 0)
+mesh = SubResource("SphereMesh_brew")
+surface_material_override/0 = SubResource("StandardMaterial3D_brew_default")
+
+[node name="OrbLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+light_color = Color(0.16, 0.88, 0.44, 1)
+light_energy = 1.65
+omni_range = 4.8

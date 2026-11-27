@@ -264,20 +264,21 @@ theme_override_constants/separation = 16
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.79, 0.36, 1)
 theme_override_font_sizes/font_size = 22
-text = "MISSION: MEND THE BROKEN WARD"
+text = "CHAMBER OF SECRET CODES"
 horizontal_alignment = 1
 
 [node name="Lore" type="Label" parent="Root/MissionModal/Panel/Margin/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.87, 0.77, 1)
 theme_override_font_sizes/font_size = 15
-text = "The ancient iron-oak ward behind you has shattered, trapping you inside the Relic Chamber.
+text = "The Serpent Arch door has sealed behind you, trapping you inside the Chamber of Secret Codes.
 
-To cast Reparo and mend the lock, you must:
-  1. Recover the 3 Arcane Relics hidden in this chamber
-     (Brass Pinion, Moonstone Core, Aether Conduit).
-  2. Forge them into a Reparo Runic Seal at the Arcane Crucible.
-  3. Return to the locked door and mend the ward."
+Complete the Hogwarts Trials step by step to reopen the door:
+  1. Dumbledore's Triple Wand Trial (Gryffindor)
+  2. Snape's Memory Trial (Slytherin)
+  3. Flitwick's Steady Hand Test (Ravenclaw)
+  4. Guess the Number (Hufflepuff)
+  5. Visit the Sorting Hat Dais at the North Altar."
 autowrap_mode = 3
 
 [node name="Buttons" type="HBoxContainer" parent="Root/MissionModal/Panel/Margin/VBox"]

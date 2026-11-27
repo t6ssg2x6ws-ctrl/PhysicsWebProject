@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/enchanted_door.gd" id="1_door"]
 [ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="2_oak"]
@@ -26,6 +26,13 @@ height = 0.28
 top_radius = 0.14
 bottom_radius = 0.14
 height = 0.22
+
+[sub_resource type="TorusMesh" id="TorusMesh_rune_halo"]
+inner_radius = 0.26
+outer_radius = 0.31
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_plate"]
+size = Vector3(0.24, 0.24, 0.2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lock"]
 albedo_color = Color(0.75, 0.62, 0.28, 1)
@@ -101,9 +108,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.15, 0)
 mesh = SubResource("BoxMesh_band")
 surface_material_override/0 = ExtResource("3_iron")
 
+[node name="BrassCornerTL" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82, 1.32, 0)
+mesh = SubResource("BoxMesh_corner_plate")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="BrassCornerTR" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 1.32, 0)
+mesh = SubResource("BoxMesh_corner_plate")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="BrassCornerBL" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82, -1.32, 0)
+mesh = SubResource("BoxMesh_corner_plate")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="BrassCornerBR" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, -1.32, 0)
+mesh = SubResource("BoxMesh_corner_plate")
+surface_material_override/0 = ExtResource("4_brass")
+
 [node name="BrassHandle" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.72, -0.1, 0)
 mesh = SubResource("CylinderMesh_handle")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="LockHaloSouth" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.1, 0.085)
+mesh = SubResource("TorusMesh_rune_halo")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="LockHaloNorth" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.1, -0.085)
+mesh = SubResource("TorusMesh_rune_halo")
 surface_material_override/0 = ExtResource("4_brass")
 
 [node name="LockPlate" type="MeshInstance3D" parent="DoorPivot/DoorLeaf"]

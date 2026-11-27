@@ -14,6 +14,7 @@ signal quest_progress_changed(collected_count: int, total_count: int)
 signal notification_requested(title: String, message: String, accent: Color)
 signal mission_modal_requested(visible: bool)
 signal camera_shake_requested(intensity: float, duration: float)
+signal mission_station_interacted(station_id: String, step_number: int, station_title: String)
 
 const TOTAL_PARTS := 3
 
@@ -87,8 +88,8 @@ func accept_mission() -> void:
 		emit_signal("quest_progress_changed", collected_parts.size(), TOTAL_PARTS)
 		emit_signal(
 			"notification_requested",
-			"MISSION ACCEPTED: REPARO THE WARD",
-			"Find the 3 Arcane Lock Relics hidden in the Relic Chamber, then forge them at the Crucible.",
+			"MISSION ACCEPTED: CHAMBER OF SECRET CODES",
+			"Complete the 4 Hogwarts Trials step by step, visit the Sorting Hat, and unlock the door.",
 			Color(0.95, 0.78, 0.32)
 		)
 
@@ -154,15 +155,15 @@ func complete_door_repair() -> void:
 func get_objective_text() -> String:
 	match state:
 		MissionState.EXPLORING_ROOM1:
-			return "Explore the Candlelit Antechamber and open the Iron-Oak Door ahead."
+			return "Explore the Hogwarts Antechamber and open the Serpent Arch Door ahead."
 		MissionState.TRAPPED_IN_ROOM2:
-			return "The door locked behind you! Approach the Enchanted Lectern [E] to take the mission."
+			return "The door locked behind you! Read the Enchanted Lectern [E] to begin the trials."
 		MissionState.MISSION_ACTIVE:
-			return "Recover the 3 Arcane Lock Relics in this chamber (%d/%d)." % [collected_parts.size(), TOTAL_PARTS]
+			return "Complete the 4 Chamber Trials step by step, then visit the Sorting Hat."
 		MissionState.PARTS_COLLECTED:
-			return "Forge the Reparo Runic Seal at the Arcane Crucible (East alcove)."
+			return "Proceed to the Sorting Hat Dais at the North Altar."
 		MissionState.SEAL_FORGED:
-			return "Return to the broken Door and cast Reparo [E] to fix the lock."
+			return "Return to the Iron-Oak Door and cast Reparo [E] to open it."
 		MissionState.DOOR_FIXED:
-			return "Mission Complete! The Iron-Oak Door is repaired and unlocked."
+			return "Mission Complete! The Chamber Door is open."
 	return ""

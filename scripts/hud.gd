@@ -88,7 +88,13 @@ func _refresh_mission_ui() -> void:
 		parts_list_label.visible = false
 	else:
 		parts_list_label.visible = true
-		var expected := ["Brass Ward Pinion", "Moonstone Lock Core", "Aether Silver Conduit"]
+		var expected := [
+			"1. Dumbledore's Triple Wand Trial",
+			"2. Snape's Memory Trial",
+			"3. Flitwick's Steady Hand Test",
+			"4. Guess the Number",
+			"5. The Sorting Hat"
+		]
 		var lines: Array[String] = []
 		for item in expected:
 			var mark := "[X]" if item in GameManager.collected_parts else "[ ]"

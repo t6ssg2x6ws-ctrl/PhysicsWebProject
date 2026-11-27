@@ -1,0 +1,165 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="1_oak"]
+[ext_resource type="Material" path="res://assets/materials/mat_wrought_iron.tres" id="2_iron"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rack"]
+size = Vector3(1.85, 2.45, 0.44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back"]
+size = Vector3(1.8, 2.4, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side"]
+size = Vector3(0.08, 2.44, 0.44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plank"]
+size = Vector3(1.72, 0.06, 0.42)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vial_tall"]
+top_radius = 0.032
+bottom_radius = 0.062
+height = 0.24
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vial_round"]
+top_radius = 0.025
+bottom_radius = 0.082
+height = 0.19
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emerald"]
+albedo_color = Color(0.14, 0.84, 0.44, 1)
+roughness = 0.12
+emission_enabled = true
+emission = Color(0.14, 0.88, 0.45, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ruby"]
+albedo_color = Color(0.88, 0.18, 0.24, 1)
+roughness = 0.12
+emission_enabled = true
+emission = Color(0.92, 0.2, 0.24, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sapphire"]
+albedo_color = Color(0.18, 0.48, 0.96, 1)
+roughness = 0.12
+emission_enabled = true
+emission = Color(0.2, 0.54, 1, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_amber"]
+albedo_color = Color(0.96, 0.7, 0.18, 1)
+roughness = 0.12
+emission_enabled = true
+emission = Color(0.98, 0.72, 0.18, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_violet"]
+albedo_color = Color(0.68, 0.28, 0.94, 1)
+roughness = 0.12
+emission_enabled = true
+emission = Color(0.72, 0.3, 0.98, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_box"]
+size = Vector3(0.32, 0.2, 0.28)
+
+[node name="PropApothecaryShelf" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.225, 0)
+shape = SubResource("BoxShape3D_rack")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, -0.19)
+mesh = SubResource("BoxMesh_back")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="LeftSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.22, 0)
+mesh = SubResource("BoxMesh_side")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="RightSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.22, 0)
+mesh = SubResource("BoxMesh_side")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="Plank0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.92, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.42, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="CrateLow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.25, 0.02)
+mesh = SubResource("BoxMesh_box")
+surface_material_override/0 = ExtResource("2_iron")
+
+[node name="Vial1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0.87, 0.04)
+mesh = SubResource("CylinderMesh_vial_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald")
+
+[node name="Vial2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.85, 0.04)
+mesh = SubResource("CylinderMesh_vial_round")
+surface_material_override/0 = SubResource("StandardMaterial3D_ruby")
+
+[node name="Vial3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.87, 0.04)
+mesh = SubResource("CylinderMesh_vial_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_sapphire")
+
+[node name="Vial4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 0.85, 0.04)
+mesh = SubResource("CylinderMesh_vial_round")
+surface_material_override/0 = SubResource("StandardMaterial3D_amber")
+
+[node name="Vial5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 1.45, 0.04)
+mesh = SubResource("CylinderMesh_vial_round")
+surface_material_override/0 = SubResource("StandardMaterial3D_violet")
+
+[node name="Vial6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.47, 0.04)
+mesh = SubResource("CylinderMesh_vial_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald")
+
+[node name="Vial7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.45, 0.04)
+mesh = SubResource("CylinderMesh_vial_round")
+surface_material_override/0 = SubResource("StandardMaterial3D_sapphire")
+
+[node name="Vial8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 2.07, 0.04)
+mesh = SubResource("CylinderMesh_vial_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_ruby")
+
+[node name="Vial9" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.05, 0.04)
+mesh = SubResource("CylinderMesh_vial_round")
+surface_material_override/0 = SubResource("StandardMaterial3D_amber")
+
+[node name="Vial10" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 2.07, 0.04)
+mesh = SubResource("CylinderMesh_vial_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_violet")

@@ -25,9 +25,9 @@ func get_prompt() -> String:
 		GameManager.MissionState.TRAPPED_IN_ROOM2:
 			return "[E] Read Enchanted Mission Scroll"
 		GameManager.MissionState.MISSION_ACTIVE:
-			return "[E] Check Mission Progress (%d/%d Relics)" % [GameManager.collected_parts.size(), GameManager.TOTAL_PARTS]
+			return "[E] Check Chamber Trials Guide"
 		GameManager.MissionState.PARTS_COLLECTED:
-			return "[E] Scroll: Forge the Seal at the Arcane Crucible"
+			return "[E] Scroll: Proceed to the Sorting Hat Dais"
 		GameManager.MissionState.SEAL_FORGED:
 			return "[E] Scroll: Return to Door & Cast Reparo"
 		GameManager.MissionState.DOOR_FIXED:
