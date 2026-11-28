@@ -97,7 +97,6 @@ script = ExtResource("1_station")
 step_number = 5
 station_id = "sorting_hat"
 station_title = "The Sorting Hat"
-house_name = "House Selection"
 station_hint = "Complete all 4 trials to let the Sorting Hat assign your Hogwarts House and unlock the door."
 accent_color = Color(0.98, 0.82, 0.36, 1)
 
@@ -218,7 +217,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_bt_glow")
 
 [node name="TitleLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.55)
-text = "V. THE SORTING HAT"
+text = "THE SORTING HAT"
 font_size = 22
 outline_size = 4
 modulate = Color(0.14, 0.08, 0.03, 1)

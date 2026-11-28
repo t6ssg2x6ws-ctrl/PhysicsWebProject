@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3]
+[gd_scene load_steps=37 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/mat_flagstone_floor.tres" id="1_floor"]
 [ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="2_stone"]
@@ -12,10 +12,11 @@
 [ext_resource type="PackedScene" path="res://scenes/props/floating_candle.tscn" id="10_candle"]
 [ext_resource type="PackedScene" path="res://scenes/props/chandelier.tscn" id="11_chandelier"]
 [ext_resource type="PackedScene" path="res://scenes/props/house_banner.tscn" id="12_banner"]
-[ext_resource type="PackedScene" path="res://scenes/props/bookshelf.tscn" id="13_shelf"]
 [ext_resource type="PackedScene" path="res://scenes/props/mission_lectern.tscn" id="14_lectern"]
 [ext_resource type="PackedScene" path="res://scenes/props/station_wand_trial.tscn" id="15_station1"]
 [ext_resource type="PackedScene" path="res://scenes/props/prop_voltage_obelisk.tscn" id="16_obelisk"]
+[ext_resource type="Script" path="res://scripts/common_room_lighting.gd" id="17_lighting"]
+[ext_resource type="PackedScene" path="res://scenes/props/common_room_furnishings.tscn" id="18_furnishings"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(10.5, 0.4, 10.5)
@@ -83,6 +84,9 @@ emission = Color(1, 0.74, 0.2, 1)
 emission_energy_multiplier = 3.2
 
 [node name="RoomMission1_Dumbledore" type="Node3D"]
+script = ExtResource("17_lighting")
+
+[node name="CommonRoomFurnishings" parent="." instance=ExtResource("18_furnishings")]
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
@@ -239,12 +243,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 3.5, 2.0)
 [node name="Candle4" parent="." instance=ExtResource("10_candle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 3.65, 2.0)
 
-[node name="BookshelfNW" parent="." instance=ExtResource("13_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 0, -4.65)
-
-[node name="BookshelfNE" parent="." instance=ExtResource("13_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 0, -4.65)
-
 [node name="MissionLectern" parent="." instance=ExtResource("14_lectern")]
 transform = Transform3D(0.924, 0, 0.383, 0, 1, 0, -0.383, 0, 0.924, -1.9, 0, 2.6)
 
@@ -267,7 +265,7 @@ glow_color = Color(0.28, 0.95, 0.52, 1)
 display_label = "WAND III: ~4V"
 
 [node name="WandDisplayTable" type="StaticBody3D" parent="."]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.1, 0, 0)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.95, 0, 3.85)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WandDisplayTable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
@@ -309,7 +307,7 @@ mesh = SubResource("CylinderMesh_wand")
 surface_material_override/0 = ExtResource("3_oak")
 
 [node name="OrreryTable" type="StaticBody3D" parent="."]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.1, 0, 0)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.18, 0, -1.96)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="OrreryTable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)

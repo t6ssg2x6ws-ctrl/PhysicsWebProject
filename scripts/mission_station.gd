@@ -3,7 +3,6 @@ extends Interactable
 @export var step_number: int = 1
 @export var station_id: String = "wand_trial"
 @export var station_title: String = "Dumbledore's Triple Wand Trial"
-@export var house_name: String = "Gryffindor"
 @export var station_hint: String = "Calibrate the 3 wand dials to awaken the trial."
 @export var accent_color: Color = Color(0.95, 0.75, 0.32)
 
@@ -27,10 +26,10 @@ func _process(delta: float) -> void:
 
 func get_prompt() -> String:
 	if GameManager.state == GameManager.MissionState.EXPLORING_ROOM1:
-		return "%s (%s)" % [station_title, house_name]
+		return station_title
 	if GameManager.state == GameManager.MissionState.TRAPPED_IN_ROOM2:
-		return "Step %d: %s — Read the Enchanted Lectern first" % [step_number, station_title]
-	return "[E] Step %d: %s (%s)" % [step_number, station_title, house_name]
+		return "[LOCKED] Read the Enchanted Lectern to begin %s." % station_title
+	return "[E] %s" % station_title
 
 
 func interact(_player: Node3D) -> void:
@@ -46,7 +45,7 @@ func interact(_player: Node3D) -> void:
 	GameManager.emit_signal("mission_station_interacted", station_id, step_number, station_title)
 	GameManager.emit_signal(
 		"notification_requested",
-		"STEP %d — %s" % [step_number, station_title.to_upper()],
+		station_title,
 		station_hint,
 		accent_color
 	)

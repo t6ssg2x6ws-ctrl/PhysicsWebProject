@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <pattern id="weave" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 1h8M1 0v8" stroke="#d9986c" opacity=".08"/>
+    </pattern>
+    <g id="lozenge">
+      <path d="M0-123Q34-40 123 0Q35 36 0 123Q-34 41-123 0Q-33-39 0-123Z" fill="#6e2234" stroke="#9a4f49" stroke-width="2"/>
+      <path d="M0-106Q27-35 104 0Q29 29 0 105Q-27 32-104 0Q-27-32 0-106Z" fill="none" stroke="#c68c61" stroke-opacity=".52"/>
+      <path d="M0-45c-8 17-38 14-38 33 0 10 10 15 18 8-2 9 7 18 16 15l4 29 4-29c9 3 18-6 16-15 8 7 18 2 18-8 0-19-30-16-38-33Z" fill="#af715a"/>
+      <path d="M0-24c-13 17-20 8-20 14 0 9 11 7 20 15 9-8 20-6 20-15 0-6-7 3-20-14Z" fill="#65202f"/>
+      <path d="M0-73l4 10-4 10-4-10ZM0 53l4 10-4 10-4-10ZM-73 0l10-4 10 4-10 4ZM53 0l10-4 10 4-10 4Z" fill="#d49a68"/>
+    </g>
+  </defs>
+  <rect width="256" height="256" fill="#4d1828"/>
+  <use href="#lozenge" x="128" y="128"/><use href="#lozenge"/><use href="#lozenge" x="256"/>
+  <use href="#lozenge" y="256"/><use href="#lozenge" x="256" y="256"/>
+  <rect width="256" height="256" fill="url(#weave)"/>
+</svg>
