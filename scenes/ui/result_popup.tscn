@@ -1,0 +1,164 @@
+; ══════════════════════════════════════════════════════════════════════════════
+; result_popup.tscn
+; ══════════════════════════════════════════════════════════════════════════════
+; Node hierarchy:
+;
+; ResultPopup  (Control, full-screen, script=result_popup.gd)
+; └─ Dimmer            (ColorRect  – semi-transparent dark overlay)
+;    └─ ParchmentRect  (TextureRect – parchment scroll background)
+;       └─ VBox        (VBoxContainer – centred content)
+;          ├─ MessageLabel   (Label)
+;          ├─ CrossesLabel   (Label)
+;          ├─ TriesLabel     (Label)
+;          └─ TryAgainButton (Button)
+; ══════════════════════════════════════════════════════════════════════════════
+[gd_scene format=3 uid="uid://result_popup_v2"]
+
+[ext_resource type="Script" path="res://scripts/result_popup.gd" id="1_script"]
+
+; ── Tom Riddle / old-quill system font ───────────────────────────────────────
+[sub_resource type="SystemFont" id="SystemFont_riddle"]
+font_names = PackedStringArray("Palatino Linotype", "Palatino", "Book Antiqua", "IM Fell English", "Georgia", "serif")
+font_style = 1
+
+; ── Parchment panel: aged-parchment look (swap texture later) ─────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
+bg_color             = Color(0.878, 0.812, 0.671, 1.0)
+border_width_left    = 6
+border_width_top     = 6
+border_width_right   = 6
+border_width_bottom  = 6
+border_color         = Color(0.388, 0.242, 0.09, 1)
+corner_radius_top_left     = 4
+corner_radius_top_right    = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left  = 4
+shadow_color = Color(0.05, 0.03, 0.01, 0.75)
+shadow_size  = 24
+shadow_offset = Vector2(0, 6)
+
+; ── Crosses / message label colors (ink on parchment) ────────────────────────
+; ── Wood button styles ────────────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color             = Color(0.192, 0.133, 0.075, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 3
+border_color         = Color(0.588, 0.431, 0.196, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+shadow_color  = Color(0.05, 0.03, 0.01, 0.6)
+shadow_size   = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color             = Color(0.282, 0.192, 0.098, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 3
+border_color         = Color(0.72, 0.56, 0.24, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color             = Color(0.12, 0.08, 0.04, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 3
+border_color         = Color(0.45, 0.32, 0.12, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+; ══════════════════════════════════════════════════════════════════════════════
+[node name="ResultPopup" type="Control"]
+layout_mode      = 3
+anchors_preset   = 15
+anchor_right     = 1.0
+anchor_bottom    = 1.0
+script           = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode    = 1
+anchors_preset = 15
+anchor_right   = 1.0
+anchor_bottom  = 1.0
+color          = Color(0.04, 0.02, 0.01, 0.78)
+mouse_filter   = 0
+
+; ParchmentRect: TextureRect acting as the scroll background.
+; Assign texture = preload("res://assets/textures/parchment_scroll.png")
+; in _ready() or via the editor once you have the image.
+[node name="ParchmentRect" type="TextureRect" parent="Dimmer"]
+layout_mode      = 1
+anchors_preset   = 8
+anchor_left      = 0.5
+anchor_top       = 0.5
+anchor_right     = 0.5
+anchor_bottom    = 0.5
+offset_left      = -320.0
+offset_top       = -220.0
+offset_right     = 320.0
+offset_bottom    = 220.0
+expand_mode      = 1
+stretch_mode     = 5
+; When no texture is set, the StyleBoxFlat below gives the parchment look.
+theme_override_styles/panel = SubResource("StyleBoxFlat_parchment")
+
+[node name="VBox" type="VBoxContainer" parent="Dimmer/ParchmentRect"]
+layout_mode    = 1
+anchors_preset = 15
+anchor_right   = 1.0
+anchor_bottom  = 1.0
+offset_left    = 48.0
+offset_top     = 36.0
+offset_right   = -48.0
+offset_bottom  = -36.0
+alignment      = 1
+theme_override_constants/separation = 18
+
+[node name="MessageLabel" type="Label" parent="Dimmer/ParchmentRect/VBox"]
+layout_mode  = 2
+text         = "…"
+horizontal_alignment = 1
+vertical_alignment   = 1
+autowrap_mode        = 3
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color    = Color(0.14, 0.08, 0.03, 1)
+
+[node name="CrossesLabel" type="Label" parent="Dimmer/ParchmentRect/VBox"]
+layout_mode  = 2
+text         = "○  ○  ○"
+horizontal_alignment = 1
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color    = Color(0.55, 0.15, 0.08, 1)
+
+[node name="TriesLabel" type="Label" parent="Dimmer/ParchmentRect/VBox"]
+layout_mode  = 2
+text         = "3 TRIES LEFT"
+horizontal_alignment = 1
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color    = Color(0.3, 0.18, 0.06, 1)
+
+[node name="TryAgainButton" type="Button" parent="Dimmer/ParchmentRect/VBox"]
+layout_mode  = 2
+custom_minimum_size = Vector2(240, 52)
+text         = "TRY AGAIN"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1.0, 1.0, 0.88, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")

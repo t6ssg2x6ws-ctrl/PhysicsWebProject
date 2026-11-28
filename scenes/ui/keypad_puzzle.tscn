@@ -1,0 +1,386 @@
+; ══════════════════════════════════════════════════════════════════════════════
+; keypad_puzzle.tscn
+; ══════════════════════════════════════════════════════════════════════════════
+; Node hierarchy:
+;
+; KeypadPuzzle  (Control, full-screen, script=keypad_puzzle.gd)
+; └─ KeypadPanel  (PanelContainer – dark wood backing)
+;    └─ VBox      (VBoxContainer)
+;       ├─ Display        (Label – shows typed digits)
+;       ├─ Rows           (VBoxContainer – rows of digit buttons)
+;       │  ├─ Row1  (HBoxContainer)  Btn7  Btn8  Btn9
+;       │  ├─ Row2  (HBoxContainer)  Btn4  Btn5  Btn6
+;       │  ├─ Row3  (HBoxContainer)  Btn1  Btn2  Btn3
+;       │  └─ Row4  (HBoxContainer)  BtnClear  Btn0  BtnEnter
+;       └─ (ResultPopup instanced here)
+; ══════════════════════════════════════════════════════════════════════════════
+[gd_scene format=3 uid="uid://keypad_puzzle_v2"]
+
+[ext_resource type="Script"      path="res://scripts/keypad_puzzle.gd"       id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/result_popup.tscn"    id="2_popup"]
+
+; ── Tom Riddle font ───────────────────────────────────────────────────────────
+[sub_resource type="SystemFont" id="SystemFont_riddle"]
+font_names = PackedStringArray("Palatino Linotype", "Palatino", "Book Antiqua", "IM Fell English", "Georgia", "serif")
+font_style = 1
+
+; ── Dark wood panel ───────────────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color             = Color(0.098, 0.067, 0.039, 1)
+border_width_left    = 5
+border_width_top     = 5
+border_width_right   = 5
+border_width_bottom  = 5
+border_color         = Color(0.502, 0.361, 0.157, 1)
+corner_radius_top_left     = 10
+corner_radius_top_right    = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left  = 10
+shadow_color  = Color(0.0, 0.0, 0.0, 0.7)
+shadow_size   = 20
+shadow_offset = Vector2(0, 8)
+
+; ── Display box ───────────────────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_display"]
+bg_color             = Color(0.847, 0.761, 0.596, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 3
+border_color         = Color(0.388, 0.263, 0.09, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+; ── Digit button styles ───────────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_key_normal"]
+bg_color             = Color(0.302, 0.212, 0.122, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.588, 0.431, 0.196, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+shadow_color  = Color(0.0, 0.0, 0.0, 0.5)
+shadow_size   = 4
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_key_hover"]
+bg_color             = Color(0.42, 0.302, 0.165, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.72, 0.561, 0.267, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_key_pressed"]
+bg_color             = Color(0.18, 0.125, 0.071, 1)
+border_width_left    = 3
+border_width_top     = 5
+border_width_right   = 3
+border_width_bottom  = 2
+border_color         = Color(0.45, 0.325, 0.137, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+; ── Brass ENTER button styles ─────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enter_normal"]
+bg_color             = Color(0.502, 0.4, 0.165, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.78, 0.651, 0.302, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enter_hover"]
+bg_color             = Color(0.627, 0.502, 0.204, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.9, 0.78, 0.4, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enter_pressed"]
+bg_color             = Color(0.337, 0.267, 0.098, 1)
+border_width_left    = 3
+border_width_top     = 5
+border_width_right   = 3
+border_width_bottom  = 2
+border_color         = Color(0.588, 0.467, 0.22, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+; ── Red CLEAR button ──────────────────────────────────────────────────────────
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clr_normal"]
+bg_color             = Color(0.337, 0.098, 0.082, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.627, 0.22, 0.157, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clr_hover"]
+bg_color             = Color(0.471, 0.141, 0.118, 1)
+border_width_left    = 3
+border_width_top     = 3
+border_width_right   = 3
+border_width_bottom  = 5
+border_color         = Color(0.78, 0.286, 0.192, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clr_pressed"]
+bg_color             = Color(0.192, 0.055, 0.047, 1)
+border_width_left    = 3
+border_width_top     = 5
+border_width_right   = 3
+border_width_bottom  = 2
+border_color         = Color(0.431, 0.145, 0.118, 1)
+corner_radius_top_left     = 6
+corner_radius_top_right    = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left  = 6
+
+; ══════════════════════════════════════════════════════════════════════════════
+[node name="KeypadPuzzle" type="Control"]
+layout_mode    = 3
+anchors_preset = 15
+anchor_right   = 1.0
+anchor_bottom  = 1.0
+script         = ExtResource("1_script")
+
+; ── Centred keypad panel ──────────────────────────────────────────────────────
+[node name="KeypadPanel" type="PanelContainer" parent="."]
+layout_mode    = 1
+anchors_preset = 8
+anchor_left    = 0.5
+anchor_top     = 0.5
+anchor_right   = 0.5
+anchor_bottom  = 0.5
+offset_left    = -180.0
+offset_top     = -260.0
+offset_right   = 180.0
+offset_bottom  = 260.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="KeypadPanel"]
+layout_mode  = 2
+theme_override_constants/separation = 12
+offset_left  = 20
+offset_top   = 20
+offset_right = -20
+offset_bottom = -20
+
+; ── DISPLAY ───────────────────────────────────────────────────────────────────
+[node name="Display" type="Label" parent="KeypadPanel/VBox"]
+layout_mode  = 2
+custom_minimum_size = Vector2(0, 64)
+text         = "_ _ _"
+horizontal_alignment = 1
+vertical_alignment   = 1
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color    = Color(0.14, 0.08, 0.03, 1)
+theme_override_styles/normal   = SubResource("StyleBoxFlat_display")
+
+; ── ROWS OF BUTTONS ───────────────────────────────────────────────────────────
+[node name="Rows" type="VBoxContainer" parent="KeypadPanel/VBox"]
+layout_mode  = 2
+theme_override_constants/separation = 8
+
+; Row 1: 7 8 9
+[node name="Row1" type="HBoxContainer" parent="KeypadPanel/VBox/Rows"]
+layout_mode  = 2
+alignment    = 1
+theme_override_constants/separation = 8
+
+[node name="Btn7" type="Button" parent="KeypadPanel/VBox/Rows/Row1"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "7"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn8" type="Button" parent="KeypadPanel/VBox/Rows/Row1"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "8"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn9" type="Button" parent="KeypadPanel/VBox/Rows/Row1"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "9"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+; Row 2: 4 5 6
+[node name="Row2" type="HBoxContainer" parent="KeypadPanel/VBox/Rows"]
+layout_mode  = 2
+alignment    = 1
+theme_override_constants/separation = 8
+
+[node name="Btn4" type="Button" parent="KeypadPanel/VBox/Rows/Row2"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "4"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn5" type="Button" parent="KeypadPanel/VBox/Rows/Row2"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "5"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn6" type="Button" parent="KeypadPanel/VBox/Rows/Row2"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "6"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+; Row 3: 1 2 3
+[node name="Row3" type="HBoxContainer" parent="KeypadPanel/VBox/Rows"]
+layout_mode  = 2
+alignment    = 1
+theme_override_constants/separation = 8
+
+[node name="Btn1" type="Button" parent="KeypadPanel/VBox/Rows/Row3"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "1"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn2" type="Button" parent="KeypadPanel/VBox/Rows/Row3"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "2"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="Btn3" type="Button" parent="KeypadPanel/VBox/Rows/Row3"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "3"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+; Row 4: CLR  0  ENTER
+[node name="Row4" type="HBoxContainer" parent="KeypadPanel/VBox/Rows"]
+layout_mode  = 2
+alignment    = 1
+theme_override_constants/separation = 8
+
+[node name="BtnClear" type="Button" parent="KeypadPanel/VBox/Rows/Row4"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "CLR"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color       = Color(1.0, 0.85, 0.82, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_clr_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_clr_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_clr_pressed")
+
+[node name="Btn0" type="Button" parent="KeypadPanel/VBox/Rows/Row4"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "0"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.95, 0.88, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_key_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_key_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_key_pressed")
+
+[node name="BtnEnter" type="Button" parent="KeypadPanel/VBox/Rows/Row4"]
+layout_mode  = 2
+custom_minimum_size = Vector2(88, 60)
+text         = "↵"
+theme_override_fonts/font      = SubResource("SystemFont_riddle")
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color       = Color(0.98, 0.95, 0.78, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.9, 1)
+theme_override_styles/normal  = SubResource("StyleBoxFlat_enter_normal")
+theme_override_styles/hover   = SubResource("StyleBoxFlat_enter_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_enter_pressed")
+
+; ── ResultPopup instanced as child (renders on top) ───────────────────────────
+[node name="ResultPopup" parent="." instance=ExtResource("2_popup")]
