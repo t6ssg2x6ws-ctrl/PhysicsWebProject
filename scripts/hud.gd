@@ -10,8 +10,18 @@ extends CanvasLayer
 @onready var toast_body: Label = $Root/ToastPanel/Margin/VBox/ToastBody
 @onready var mission_modal: Control = $Root/MissionModal
 @onready var pause_overlay: Control = $Root/PauseOverlay
+@onready var guess_overlay: Control = $Root/GuessOverlay
+@onready var guess_input: LineEdit = $Root/GuessOverlay/Panel/Margin/VBox/GuessInput
+@onready var guess_submit: Button = $Root/GuessOverlay/Panel/Margin/VBox/Buttons/SubmitButton
+@onready var guess_restart: Button = $Root/GuessOverlay/Panel/Margin/VBox/Buttons/RestartButton
+@onready var guess_feedback: Label = $Root/GuessOverlay/Panel/Margin/VBox/FeedbackLabel
+@onready var guess_tries: Label = $Root/GuessOverlay/Panel/Margin/VBox/TriesLabel
 
 var toast_tween: Tween = null
+var secret_number := 0
+var tries_left := 3
+var guess_round_active := false
+var guess_rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
@@ -21,11 +31,14 @@ func _ready() -> void:
 	toast_panel.modulate.a = 0.0
 	mission_modal.visible = false
 	pause_overlay.visible = false
+	guess_overlay.visible = false
 
 	GameManager.state_changed.connect(_on_state_changed)
 	GameManager.quest_progress_changed.connect(_on_quest_progress_changed)
 	GameManager.notification_requested.connect(_on_notification_requested)
 	GameManager.mission_modal_requested.connect(_on_mission_modal_requested)
+	GameManager.mission_station_interacted.connect(_on_mission_station_interacted)
+	guess_rng.randomize()
 
 	var accept_btn := get_node_or_null("Root/MissionModal/Panel/Margin/VBox/Buttons/AcceptButton")
 	if accept_btn is Button:
@@ -39,11 +52,23 @@ func _ready() -> void:
 	var restart_btn := get_node_or_null("Root/PauseOverlay/Panel/Margin/VBox/RestartButton")
 	if restart_btn is Button:
 		restart_btn.pressed.connect(_on_restart_button_pressed)
+	guess_submit.pressed.connect(_on_guess_submit_pressed)
+	guess_restart.pressed.connect(_start_guess_round)
+	guess_input.text_submitted.connect(_on_guess_text_submitted)
+	var close_guess_btn := get_node_or_null("Root/GuessOverlay/Panel/Margin/VBox/Buttons/CloseButton")
+	if close_guess_btn is Button:
+		close_guess_btn.pressed.connect(_close_guess_game)
 
 	_refresh_mission_ui()
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if guess_overlay.visible:
+		if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
+			_close_guess_game()
+			get_viewport().set_input_as_handled()
+		return
+
 	if mission_modal.visible:
 		if event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"):
 			GameManager.accept_mission()
@@ -119,6 +144,76 @@ func _on_notification_requested(title: String, message: String, accent: Color) -
 
 func _on_mission_modal_requested(show_modal: bool) -> void:
 	mission_modal.visible = show_modal
+
+
+func _on_mission_station_interacted(station_id: String, _step_number: int, _station_title: String) -> void:
+	# "guess_spell" is now handled by the 3-D keypad (keypad_guess.gd).
+	# The old text-based GuessOverlay is intentionally suppressed here.
+	if station_id == "guess_spell":
+		return
+	# (future stations could be dispatched here)
+
+
+func _start_guess_round() -> void:
+	secret_number = guess_rng.randi_range(1, 100)
+	tries_left = 3
+	guess_round_active = true
+	guess_feedback.text = "A number has been chosen. Make your first guess!"
+	guess_tries.text = "Tries left: %d" % tries_left
+	guess_input.text = ""
+	guess_input.editable = true
+	guess_submit.disabled = false
+	guess_restart.disabled = false
+	guess_input.grab_focus()
+
+
+func _on_guess_submit_pressed() -> void:
+	_submit_guess()
+
+
+func _on_guess_text_submitted(_text: String) -> void:
+	_submit_guess()
+
+
+func _submit_guess() -> void:
+	if not guess_round_active:
+		guess_feedback.text = "This round is over. Select New Round to play again."
+		return
+	var entered := guess_input.text.strip_edges()
+	if not entered.is_valid_int() or int(entered) < 1 or int(entered) > 100:
+		guess_feedback.text = "Enter a whole number from 1 to 100."
+		return
+	var guess := int(entered)
+	tries_left -= 1
+	guess_tries.text = "Tries left: %d" % tries_left
+	if guess == secret_number:
+		guess_round_active = false
+		guess_feedback.text = "Correct! The number was %d. Start a new round whenever you like." % secret_number
+		guess_input.editable = false
+		guess_submit.disabled = true
+	elif tries_left == 0:
+		guess_round_active = false
+		guess_feedback.text = "Out of tries. The number was %d. Try another round!" % secret_number
+		guess_input.editable = false
+		guess_submit.disabled = true
+	elif guess > secret_number:
+		guess_feedback.text = "Too high. Try a smaller number."
+		_enable_next_guess()
+	else:
+		guess_feedback.text = "Too low. Try a larger number."
+		_enable_next_guess()
+
+
+func _enable_next_guess() -> void:
+	guess_input.text = ""
+	guess_input.editable = true
+	guess_submit.disabled = false
+	guess_input.grab_focus()
+
+
+func _close_guess_game() -> void:
+	guess_overlay.visible = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _on_accept_button_pressed() -> void:

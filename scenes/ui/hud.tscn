@@ -349,3 +349,98 @@ text = "Resume"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Restart Chamber"
+
+[node name="GuessOverlay" type="ColorRect" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.03, 0.72)
+
+[node name="Panel" type="PanelContainer" parent="Root/GuessOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -185.0
+offset_right = 250.0
+offset_bottom = 185.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_parchment_modal")
+
+[node name="Margin" type="MarginContainer" parent="Root/GuessOverlay/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Root/GuessOverlay/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.79, 0.36, 1)
+theme_override_font_sizes/font_size = 22
+text = "GUESS THE NUMBER"
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.77, 1)
+theme_override_font_sizes/font_size = 15
+text = "The spell has chosen a number from 1 to 100. You have 3 tries."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="TriesLabel" type="Label" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.42, 1)
+theme_override_font_sizes/font_size = 16
+text = "Tries left: 3"
+horizontal_alignment = 1
+
+[node name="GuessInput" type="LineEdit" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+placeholder_text = "Enter a number from 1 to 100"
+max_length = 3
+alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_font_sizes/font_size = 15
+text = "Starting a new round..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Root/GuessOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="SubmitButton" type="Button" parent="Root/GuessOverlay/Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 2
+text = "Submit Guess"
+
+[node name="RestartButton" type="Button" parent="Root/GuessOverlay/Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(110, 42)
+layout_mode = 2
+text = "New Round"
+
+[node name="CloseButton" type="Button" parent="Root/GuessOverlay/Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(80, 42)
+layout_mode = 2
+text = "Close"

@@ -1,23 +1,29 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene format=3 uid="uid://station_guess_spell_m4"]
 
-[ext_resource type="Script" path="res://scripts/mission_station.gd" id="1_station"]
+[ext_resource type="Script"  path="res://scripts/keypad_guess.gd"           id="1_keypad"]
 [ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="2_oak"]
 [ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="3_brass"]
 [ext_resource type="Material" path="res://assets/materials/mat_hufflepuff.tres" id="4_huff"]
 [ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="5_slate"]
-[ext_resource type="Material" path="res://assets/materials/mat_obsidian.tres" id="6_obs"]
+[ext_resource type="PackedScene" path="res://scenes/ui/parchment_popup.tscn" id="6_popup"]
 
+; ── Tom Riddle / old-quill system font ───────────────────────────────────────
+[sub_resource type="SystemFont" id="SystemFont_riddle"]
+font_names = PackedStringArray("Palatino Linotype", "Palatino", "Book Antiqua", "IM Fell English", "Georgia", "serif")
+font_style = 1
+
+; ── geometry ─────────────────────────────────────────────────────────────────
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
-size = Vector3(1.74, 1.35, 0.92)
+size = Vector3(1.8, 1.9, 1.0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_top"]
-size = Vector3(1.74, 0.08, 0.92)
+size = Vector3(1.74, 0.07, 0.82)
 
 [sub_resource type="BoxMesh" id="BoxMesh_leg"]
-size = Vector3(0.12, 0.82, 0.78)
+size = Vector3(0.08, 0.84, 0.72)
 
 [sub_resource type="BoxMesh" id="BoxMesh_runner"]
-size = Vector3(1.5, 0.02, 0.76)
+size = Vector3(1.74, 0.012, 0.52)
 
 [sub_resource type="BoxMesh" id="BoxMesh_console"]
 size = Vector3(1.18, 0.1, 0.56)
@@ -29,10 +35,8 @@ size = Vector3(0.44, 0.05, 0.32)
 size = Vector3(0.36, 0.02, 0.24)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oled_glow"]
-albedo_color = Color(0.18, 0.82, 0.98, 1)
-emission_enabled = true
-emission = Color(0.15, 0.78, 1, 1)
-emission_energy_multiplier = 2.4
+albedo_color = Color(0.847, 0.761, 0.596, 1)
+roughness = 0.9
 
 [sub_resource type="BoxMesh" id="BoxMesh_keypad_pad"]
 size = Vector3(0.42, 0.04, 0.42)
@@ -41,12 +45,23 @@ size = Vector3(0.42, 0.04, 0.42)
 size = Vector3(0.068, 0.026, 0.068)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_key_blue"]
-albedo_color = Color(0.18, 0.45, 0.88, 1)
-roughness = 0.35
+albedo_color = Color(0.49, 0.42, 0.34, 1)
+metallic = 0.05
+roughness = 0.82
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_key_red"]
-albedo_color = Color(0.86, 0.2, 0.22, 1)
-roughness = 0.35
+albedo_color = Color(0.302, 0.141, 0.129, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_key_enter"]
+albedo_color = Color(0.549, 0.451, 0.263, 1)
+metallic = 0.75
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_console_oak"]
+albedo_color = Color(0.243, 0.184, 0.137, 1)
+metallic = 0.0
+roughness = 0.85
 
 [sub_resource type="BoxMesh" id="BoxMesh_tome"]
 size = Vector3(0.28, 0.07, 0.36)
@@ -54,21 +69,18 @@ size = Vector3(0.28, 0.07, 0.36)
 [sub_resource type="BoxMesh" id="BoxMesh_plaque"]
 size = Vector3(1.24, 0.16, 0.04)
 
+; ══════════════════════════════════════════════════════════════════════════════
 [node name="StationGuessSpell" type="Node3D"]
-script = ExtResource("1_station")
-step_number = 4
-station_id = "guess_spell"
-station_title = "Guess the Number"
-house_name = "Hufflepuff"
-station_hint = "Use the 4x4 numeric keypad and OLED riddle screen to break the 1-100 spell code."
-accent_color = Color(0.95, 0.82, 0.32, 1)
+script = ExtResource("1_keypad")
 
+; ── interaction collider (whole station) ─────────────────────────────────────
 [node name="InteractBody" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.675, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
 shape = SubResource("BoxShape3D_body")
 
+; ── desk furniture ────────────────────────────────────────────────────────────
 [node name="TableTop" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
 mesh = SubResource("BoxMesh_top")
@@ -89,95 +101,184 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.885, 0)
 mesh = SubResource("BoxMesh_runner")
 surface_material_override/0 = ExtResource("4_huff")
 
+; ── console slope (keypad + screen sit on this) ───────────────────────────────
 [node name="ConsoleSlope" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.94, -0.342, 0, 0.342, 0.94, 0.08, 0.97, 0)
 mesh = SubResource("BoxMesh_console")
-surface_material_override/0 = ExtResource("5_slate")
+surface_material_override/0 = SubResource("StandardMaterial3D_console_oak")
 
+; ── OLED screen (LEFT side of console) ───────────────────────────────────────
 [node name="OledBezel" type="MeshInstance3D" parent="ConsoleSlope"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26, 0.06, -0.02)
 mesh = SubResource("BoxMesh_oled_bezel")
-surface_material_override/0 = ExtResource("6_obs")
+surface_material_override/0 = SubResource("StandardMaterial3D_key_enter")
 
 [node name="OledScreen" type="MeshInstance3D" parent="ConsoleSlope/OledBezel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024, 0)
 mesh = SubResource("BoxMesh_oled_screen")
 surface_material_override/0 = SubResource("StandardMaterial3D_oled_glow")
 
+; The script updates this Label3D text at runtime with the typed digits
 [node name="OledText" type="Label3D" parent="ConsoleSlope/OledBezel"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.036, 0)
-text = "GUESS 1-100
-INPUT: [ ? ]"
+text = "GUESS  0–100
+INPUT: _"
+font = SubResource("SystemFont_riddle")
 font_size = 18
 outline_size = 3
-modulate = Color(0.02, 0.08, 0.14, 1)
+modulate = Color(0.169, 0.118, 0.078, 1)
 
+; ── Keypad (RIGHT side of console) ───────────────────────────────────────────
 [node name="KeypadPad" type="MeshInstance3D" parent="ConsoleSlope"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.055, 0)
 mesh = SubResource("BoxMesh_keypad_pad")
-surface_material_override/0 = ExtResource("6_obs")
+surface_material_override/0 = SubResource("StandardMaterial3D_console_oak")
 
+; Row 1 ── 1  2  3  [CLR]
 [node name="K_1" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135, 0.026, -0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
+
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_1"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "1"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_2" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045, 0.026, -0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_2"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "2"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
 [node name="K_3" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.045, 0.026, -0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
-[node name="K_A" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_3"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "3"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
+[node name="K_Star" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.135, 0.026, -0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
 
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_Star"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "CLR"
+font = SubResource("SystemFont_riddle")
+font_size = 13
+outline_size = 2
+modulate = Color(0.9, 0.9, 0.9, 1)
+
+; Row 2 ── 4  5  6  [DEL]
 [node name="K_4" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135, 0.026, -0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
+
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_4"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "4"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_5" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045, 0.026, -0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_5"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "5"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
 [node name="K_6" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.045, 0.026, -0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
-[node name="K_B" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_6"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "6"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
+[node name="K_A" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.135, 0.026, -0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
 
+; Row 3 ── 7  8  9  [blank]
 [node name="K_7" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135, 0.026, 0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
+
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_7"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "7"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_8" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045, 0.026, 0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_8"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "8"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
 [node name="K_9" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.045, 0.026, 0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
-[node name="K_C" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_9"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "9"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
+[node name="K_B" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.135, 0.026, 0.045)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
 
-[node name="K_Star" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
+; Row 4 ── [*]  0  [ENTER]  [D]
+[node name="K_C" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135, 0.026, 0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
@@ -187,16 +288,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045, 0.026, 0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_0"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "0"
+font = SubResource("SystemFont_riddle")
+font_size = 20
+outline_size = 2
+modulate = Color(0.169, 0.118, 0.078, 1)
+
 [node name="K_Hash" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.045, 0.026, 0.135)
 mesh = SubResource("BoxMesh_key")
-surface_material_override/0 = ExtResource("3_brass")
+surface_material_override/0 = SubResource("StandardMaterial3D_key_enter")
+
+[node name="Label" type="Label3D" parent="ConsoleSlope/KeypadPad/K_Hash"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
+text = "↵"
+font = SubResource("SystemFont_riddle")
+font_size = 16
+outline_size = 2
+modulate = Color(0.95, 0.88, 0.72, 1)
 
 [node name="K_D" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.135, 0.026, 0.135)
 mesh = SubResource("BoxMesh_key")
 surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
 
+; ── decorative books ──────────────────────────────────────────────────────────
 [node name="TomeBottom" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.966, 0, 0.259, 0, 1, 0, -0.259, 0, 0.966, -0.66, 0.93, 0.05)
 mesh = SubResource("BoxMesh_tome")
@@ -207,6 +325,7 @@ transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, -0.65, 1.0, 0.
 mesh = SubResource("BoxMesh_tome")
 surface_material_override/0 = ExtResource("3_brass")
 
+; ── front name plaque ─────────────────────────────────────────────────────────
 [node name="FrontPlaque" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.45)
 mesh = SubResource("BoxMesh_plaque")
@@ -215,12 +334,17 @@ surface_material_override/0 = ExtResource("3_brass")
 [node name="TitleLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.48)
 text = "IV. GUESS THE NUMBER"
+font = SubResource("SystemFont_riddle")
 font_size = 20
 outline_size = 4
 modulate = Color(0.14, 0.1, 0.04, 1)
 
+; ── ambient light ─────────────────────────────────────────────────────────────
 [node name="AccentLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0.15)
 light_color = Color(0.98, 0.82, 0.36, 1)
 light_energy = 1.25
 omni_range = 4.2
+
+; ── Parchment popup (instanced from UI scene, hidden by default) ───────────────
+[node name="ParchmentPopup" parent="." instance=ExtResource("6_popup")]
