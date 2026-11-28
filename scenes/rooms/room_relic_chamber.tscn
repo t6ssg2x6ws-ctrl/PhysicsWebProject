@@ -1,0 +1,418 @@
+[gd_scene load_steps=44 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/mat_flagstone_floor.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="2_stone"]
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="3_oak"]
+[ext_resource type="Material" path="res://assets/materials/mat_wrought_iron.tres" id="4_iron"]
+[ext_resource type="PackedScene" path="res://scenes/props/wall_sconce.tscn" id="5_sconce"]
+[ext_resource type="PackedScene" path="res://scenes/props/floating_candle.tscn" id="6_candle"]
+[ext_resource type="PackedScene" path="res://scenes/props/bookshelf.tscn" id="7_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/props/mission_lectern.tscn" id="8_lectern"]
+[ext_resource type="PackedScene" path="res://scenes/props/chandelier.tscn" id="9_chandelier"]
+[ext_resource type="PackedScene" path="res://scenes/props/house_banner.tscn" id="10_banner"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_wand_trial.tscn" id="11_wand"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_snape_memory.tscn" id="12_snape"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_flitwick_maze.tscn" id="13_flitwick"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_guess_spell.tscn" id="14_guess"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_sorting_hat.tscn" id="15_sorting"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="16_brass"]
+[ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="17_slate"]
+[ext_resource type="Material" path="res://assets/materials/mat_carpet.tres" id="18_carpet"]
+[ext_resource type="Material" path="res://assets/materials/mat_gryffindor.tres" id="19_gryff"]
+[ext_resource type="Material" path="res://assets/materials/mat_slytherin.tres" id="20_slyth"]
+[ext_resource type="Material" path="res://assets/materials/mat_ravenclaw.tres" id="21_raven"]
+[ext_resource type="Material" path="res://assets/materials/mat_hufflepuff.tres" id="22_huff"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(12.5, 0.4, 12.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(12.5, 0.4, 12.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ew"]
+size = Vector3(0.5, 5.6, 12.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_ew"]
+size = Vector3(0.5, 5.6, 12.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_side"]
+size = Vector3(4.8, 5.6, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_north_side"]
+size = Vector3(4.8, 5.6, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_low"]
+size = Vector3(2.8, 2.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_north_low"]
+size = Vector3(2.8, 2.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_top"]
+size = Vector3(2.8, 1.1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_north_top"]
+size = Vector3(2.8, 1.1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_window_glass"]
+size = Vector3(2.8, 2.0, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moon_glass"]
+albedo_color = Color(0.45, 0.62, 0.9, 1)
+roughness = 0.25
+emission_enabled = true
+emission = Color(0.35, 0.52, 0.88, 1)
+emission_energy_multiplier = 1.4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pillar"]
+size = Vector3(0.68, 5.2, 0.68)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+size = Vector3(0.68, 5.2, 0.68)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar_cap"]
+size = Vector3(0.84, 0.24, 0.84)
+
+[sub_resource type="BoxMesh" id="BoxMesh_beam"]
+size = Vector3(12.2, 0.36, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wainscot_ew"]
+size = Vector3(0.08, 1.15, 11.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_medallion_pad"]
+size = Vector3(3.6, 0.014, 3.6)
+
+[sub_resource type="TorusMesh" id="TorusMesh_floor_ring"]
+inner_radius = 1.55
+outer_radius = 1.68
+
+[sub_resource type="BoxMesh" id="BoxMesh_aisle_runner"]
+size = Vector3(1.75, 0.012, 9.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_branch_runner"]
+size = Vector3(3.8, 0.012, 0.9)
+
+[node name="RoomRelicChamber" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("1_floor")
+
+[node name="Ceiling" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 2.8, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.25, 2.8, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="WainscotWest" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96, 0.58, -6)
+mesh = SubResource("BoxMesh_wainscot_ew")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="WainscotEast" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96, 0.58, -6)
+mesh = SubResource("BoxMesh_wainscot_ew")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="NorthWallLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 2.8, -12.25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWallLeft"]
+shape = SubResource("BoxShape3D_north_side")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWallLeft"]
+mesh = SubResource("BoxMesh_north_side")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="NorthWallRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 2.8, -12.25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWallRight"]
+shape = SubResource("BoxShape3D_north_side")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWallRight"]
+mesh = SubResource("BoxMesh_north_side")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="NorthWallBelowWindow" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -12.25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWallBelowWindow"]
+shape = SubResource("BoxShape3D_north_low")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWallBelowWindow"]
+mesh = SubResource("BoxMesh_north_low")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="NorthWallAboveWindow" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.05, -12.25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWallAboveWindow"]
+shape = SubResource("BoxShape3D_north_top")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWallAboveWindow"]
+mesh = SubResource("BoxMesh_north_top")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="MoonWindowGlass" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -12.2)
+mesh = SubResource("BoxMesh_window_glass")
+surface_material_override/0 = SubResource("StandardMaterial3D_moon_glass")
+
+[node name="MoonWindowMullion" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -12.15)
+scale = Vector3(0.05, 1, 1.5)
+mesh = SubResource("BoxMesh_window_glass")
+surface_material_override/0 = ExtResource("4_iron")
+
+[node name="MoonlightSpot" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819, 0.574, 0, -0.574, 0.819, 0, 3.7, -11.6)
+light_color = Color(0.58, 0.74, 1, 1)
+light_energy = 5.5
+shadow_enabled = true
+spot_range = 16.0
+spot_attenuation = 1.1
+spot_angle = 42.0
+
+[node name="CenterRunner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -5.0)
+mesh = SubResource("BoxMesh_aisle_runner")
+surface_material_override/0 = ExtResource("18_carpet")
+
+[node name="MedallionPad" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, 0, 0.707, 0, 1, 0, -0.707, 0, 0.707, 0, 0.01, -6.0)
+mesh = SubResource("BoxMesh_medallion_pad")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="MedallionRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.12, 0, 0, 0, 1, 0, 0.018, -6.0)
+mesh = SubResource("TorusMesh_floor_ring")
+surface_material_override/0 = ExtResource("16_brass")
+
+[node name="PathGryffindor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 0.007, -3.5)
+mesh = SubResource("BoxMesh_branch_runner")
+surface_material_override/0 = ExtResource("19_gryff")
+
+[node name="PathSlytherin" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 0.007, -8.5)
+mesh = SubResource("BoxMesh_branch_runner")
+surface_material_override/0 = ExtResource("20_slyth")
+
+[node name="PathRavenclaw" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 0.007, -8.5)
+mesh = SubResource("BoxMesh_branch_runner")
+surface_material_override/0 = ExtResource("21_raven")
+
+[node name="PathHufflepuff" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 0.007, -3.5)
+mesh = SubResource("BoxMesh_branch_runner")
+surface_material_override/0 = ExtResource("22_huff")
+
+[node name="PillarNW" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 2.6, -8.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PillarNW"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PillarNW"]
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Base" type="MeshInstance3D" parent="PillarNW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarNW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="PillarNE" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 2.6, -8.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PillarNE"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PillarNE"]
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Base" type="MeshInstance3D" parent="PillarNE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarNE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="PillarSW" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 2.6, -3.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PillarSW"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PillarSW"]
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Base" type="MeshInstance3D" parent="PillarSW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarSW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="PillarSE" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 2.6, -3.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PillarSE"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PillarSE"]
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Base" type="MeshInstance3D" parent="PillarSE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarSE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("17_slate")
+
+[node name="Beam1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0, -3.5)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="Beam2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0, -6.0)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="Beam3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0, -8.5)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="ChandelierSouth" parent="." instance=ExtResource("9_chandelier")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.35, -3.5)
+
+[node name="ChandelierNorth" parent="." instance=ExtResource("9_chandelier")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.35, -8.5)
+
+[node name="SconceW1" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.96, 2.45, -1.6)
+
+[node name="SconceW2" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.96, 2.45, -6.0)
+
+[node name="SconceW3" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.96, 2.45, -10.4)
+
+[node name="SconceE1" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.96, 2.45, -1.6)
+
+[node name="SconceE2" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.96, 2.45, -6.0)
+
+[node name="SconceE3" parent="." instance=ExtResource("5_sconce")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.96, 2.45, -10.4)
+
+[node name="BannerGryffindor" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.96, 2.75, -3.5)
+house = 0
+
+[node name="BannerSlytherin" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.96, 2.75, -8.5)
+house = 1
+
+[node name="BannerRavenclaw" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.96, 2.75, -8.5)
+house = 2
+
+[node name="BannerHufflepuff" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.96, 2.75, -3.5)
+house = 3
+
+[node name="BannerNorthLeft" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.85, -11.96)
+house = 2
+
+[node name="BannerNorthRight" parent="." instance=ExtResource("10_banner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 2.85, -11.96)
+house = 3
+
+[node name="CandleA" parent="." instance=ExtResource("6_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 3.7, -5.5)
+
+[node name="CandleB" parent="." instance=ExtResource("6_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 3.85, -6.2)
+
+[node name="CandleC" parent="." instance=ExtResource("6_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 3.55, -9.8)
+
+[node name="CandleD" parent="." instance=ExtResource("6_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 3.65, -9.8)
+
+[node name="BookshelfNW" parent="." instance=ExtResource("7_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15, 0, -11.7)
+
+[node name="BookshelfNE" parent="." instance=ExtResource("7_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.15, 0, -11.7)
+
+[node name="MissionLectern" parent="." instance=ExtResource("8_lectern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.4)
+
+[node name="Station1_WandTrial" parent="." instance=ExtResource("11_wand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.2, 0, -3.5)
+
+[node name="Station2_SnapeMemory" parent="." instance=ExtResource("12_snape")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.2, 0, -8.5)
+
+[node name="Station3_FlitwickMaze" parent="." instance=ExtResource("13_flitwick")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.2, 0, -8.5)
+
+[node name="Station4_GuessSpell" parent="." instance=ExtResource("14_guess")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.2, 0, -3.5)
+
+[node name="Station5_SortingHat" parent="." instance=ExtResource("15_sorting")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.35)

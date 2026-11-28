@@ -1,0 +1,134 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="1_stone"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="2_brass"]
+[ext_resource type="Material" path="res://assets/materials/mat_slytherin.tres" id="3_slyth"]
+[ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="4_slate"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_col"]
+size = Vector3(0.36, 3.45, 0.74)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cap"]
+size = Vector3(0.5, 0.22, 0.82)
+
+[sub_resource type="BoxMesh" id="BoxMesh_header"]
+size = Vector3(3.1, 0.44, 0.78)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plaque"]
+size = Vector3(1.9, 0.3, 0.84)
+
+[sub_resource type="TorusMesh" id="TorusMesh_crest_ring"]
+inner_radius = 0.24
+outer_radius = 0.31
+
+[sub_resource type="SphereMesh" id="SphereMesh_serpent_head"]
+radius = 0.11
+height = 0.22
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+radius = 0.025
+height = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emerald_eye"]
+albedo_color = Color(0.2, 1, 0.45, 1)
+emission_enabled = true
+emission = Color(0.18, 0.96, 0.42, 1)
+emission_energy_multiplier = 4.2
+
+[node name="SerpentArch" type="Node3D"]
+
+[node name="StoneColumnLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42, 1.72, 0)
+mesh = SubResource("BoxMesh_col")
+surface_material_override/0 = ExtResource("1_stone")
+
+[node name="StoneColumnRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42, 1.72, 0)
+mesh = SubResource("BoxMesh_col")
+surface_material_override/0 = ExtResource("1_stone")
+
+[node name="CapLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42, 3.48, 0)
+mesh = SubResource("BoxMesh_cap")
+surface_material_override/0 = ExtResource("4_slate")
+
+[node name="CapRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42, 3.48, 0)
+mesh = SubResource("BoxMesh_cap")
+surface_material_override/0 = ExtResource("4_slate")
+
+[node name="BaseLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42, 0.11, 0)
+mesh = SubResource("BoxMesh_cap")
+surface_material_override/0 = ExtResource("4_slate")
+
+[node name="BaseRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42, 0.11, 0)
+mesh = SubResource("BoxMesh_cap")
+surface_material_override/0 = ExtResource("4_slate")
+
+[node name="ArchHeader" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.68, 0)
+mesh = SubResource("BoxMesh_header")
+surface_material_override/0 = ExtResource("4_slate")
+
+[node name="BrassPlaque" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.68, 0)
+mesh = SubResource("BoxMesh_plaque")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="SerpentRingSouth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 4.18, 0.34)
+mesh = SubResource("TorusMesh_crest_ring")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="SerpentCrestCoreSouth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.18, 0.35)
+scale = Vector3(1.1, 1.3, 0.5)
+mesh = SubResource("SphereMesh_serpent_head")
+surface_material_override/0 = ExtResource("3_slyth")
+
+[node name="EyeSouthL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 4.21, 0.41)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_eye")
+
+[node name="EyeSouthR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 4.21, 0.41)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_eye")
+
+[node name="SerpentRingNorth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 4.18, -0.34)
+mesh = SubResource("TorusMesh_crest_ring")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="SerpentCrestCoreNorth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.18, -0.35)
+scale = Vector3(1.1, 1.3, 0.5)
+mesh = SubResource("SphereMesh_serpent_head")
+surface_material_override/0 = ExtResource("3_slyth")
+
+[node name="EyeNorthL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 4.21, -0.41)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_eye")
+
+[node name="EyeNorthR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 4.21, -0.41)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_eye")
+
+[node name="TitleLabelSouth" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.68, 0.43)
+text = "CHAMBER OF SECRET CODES"
+font_size = 24
+outline_size = 5
+modulate = Color(0.18, 0.12, 0.04, 1)
+
+[node name="TitleLabelNorth" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 3.68, -0.43)
+text = "INTO THE HOGWARTS"
+font_size = 24
+outline_size = 5
+modulate = Color(0.18, 0.12, 0.04, 1)

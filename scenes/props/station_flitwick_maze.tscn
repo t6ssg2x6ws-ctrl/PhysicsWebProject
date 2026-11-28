@@ -1,0 +1,212 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="Script" path="res://scripts/mission_station.gd" id="1_station"]
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="2_oak"]
+[ext_resource type="Material" path="res://assets/materials/mat_copper.tres" id="3_copper"]
+[ext_resource type="Material" path="res://assets/materials/mat_ravenclaw.tres" id="4_raven"]
+[ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="5_slate"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="6_brass"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.74, 1.55, 0.92)
+
+[sub_resource type="BoxMesh" id="BoxMesh_top"]
+size = Vector3(1.74, 0.08, 0.92)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg"]
+size = Vector3(0.12, 0.82, 0.78)
+
+[sub_resource type="BoxMesh" id="BoxMesh_runner"]
+size = Vector3(1.5, 0.02, 0.76)
+
+[sub_resource type="BoxMesh" id="BoxMesh_slate_base"]
+size = Vector3(1.22, 0.05, 0.54)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_post"]
+top_radius = 0.022
+bottom_radius = 0.032
+height = 0.26
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_seg1"]
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.36
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_seg2"]
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_seg3"]
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.42
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_seg4"]
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.37
+
+[sub_resource type="SphereMesh" id="SphereMesh_joint"]
+radius = 0.022
+height = 0.044
+
+[sub_resource type="TorusMesh" id="TorusMesh_probe_ring"]
+inner_radius = 0.048
+outer_radius = 0.068
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_probe_handle"]
+top_radius = 0.012
+bottom_radius = 0.018
+height = 0.22
+
+[sub_resource type="SphereMesh" id="SphereMesh_error_led"]
+radius = 0.042
+height = 0.084
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ruby_led"]
+albedo_color = Color(0.96, 0.16, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.2, 0.22, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bell"]
+top_radius = 0.045
+bottom_radius = 0.075
+height = 0.07
+
+[sub_resource type="BoxMesh" id="BoxMesh_plaque"]
+size = Vector3(1.28, 0.16, 0.04)
+
+[node name="StationFlitwickMaze" type="Node3D"]
+script = ExtResource("1_station")
+step_number = 3
+station_id = "flitwick_maze"
+station_title = "Flitwick's Steady Hand Test"
+house_name = "Ravenclaw"
+station_hint = "Guide the conductive wand ring along the enchanted wire without touching it."
+accent_color = Color(0.45, 0.72, 1, 1)
+
+[node name="InteractBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.775, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="TableTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
+mesh = SubResource("BoxMesh_top")
+surface_material_override/0 = ExtResource("2_oak")
+
+[node name="LegLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72, 0.41, 0)
+mesh = SubResource("BoxMesh_leg")
+surface_material_override/0 = ExtResource("2_oak")
+
+[node name="LegRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.72, 0.41, 0)
+mesh = SubResource("BoxMesh_leg")
+surface_material_override/0 = ExtResource("2_oak")
+
+[node name="HouseRunner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.885, 0)
+mesh = SubResource("BoxMesh_runner")
+surface_material_override/0 = ExtResource("4_raven")
+
+[node name="MazeBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.915, -0.04)
+mesh = SubResource("BoxMesh_slate_base")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="PostStart" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46, 1.06, -0.05)
+mesh = SubResource("CylinderMesh_post")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="PostEnd" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46, 1.06, -0.05)
+mesh = SubResource("CylinderMesh_post")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="WireSeg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.786, 0.618, 0, -0.618, 0.786, 0, 0, 0, 1, -0.35, 1.32, -0.05)
+mesh = SubResource("CylinderMesh_seg1")
+surface_material_override/0 = ExtResource("3_copper")
+
+[node name="WireSeg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, -0.6, 0, 0.6, 0.8, 0, 0, 0, 1, -0.12, 1.3, -0.05)
+mesh = SubResource("CylinderMesh_seg2")
+surface_material_override/0 = ExtResource("3_copper")
+
+[node name="WireSeg3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.817, 0.577, 0, -0.577, 0.817, 0, 0, 0, 1, 0.12, 1.31, -0.05)
+mesh = SubResource("CylinderMesh_seg3")
+surface_material_override/0 = ExtResource("3_copper")
+
+[node name="WireSeg4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.806, -0.591, 0, 0.591, 0.806, 0, 0, 0, 1, 0.35, 1.33, -0.05)
+mesh = SubResource("CylinderMesh_seg4")
+surface_material_override/0 = ExtResource("3_copper")
+
+[node name="Joint1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46, 1.18, -0.05)
+mesh = SubResource("SphereMesh_joint")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="Joint2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 1.46, -0.05)
+mesh = SubResource("SphereMesh_joint")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="Joint3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14, -0.05)
+mesh = SubResource("SphereMesh_joint")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="Joint4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 1.48, -0.05)
+mesh = SubResource("SphereMesh_joint")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="Joint5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46, 1.18, -0.05)
+mesh = SubResource("SphereMesh_joint")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="ProbeRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -0.35, 1.32, -0.05)
+mesh = SubResource("TorusMesh_probe_ring")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="ProbeHandle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.4, -0.916, 0, 0.916, 0.4, -0.35, 1.24, 0.08)
+mesh = SubResource("CylinderMesh_probe_handle")
+surface_material_override/0 = ExtResource("2_oak")
+
+[node name="ErrorOrb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.98, 0.14)
+mesh = SubResource("SphereMesh_error_led")
+surface_material_override/0 = SubResource("StandardMaterial3D_ruby_led")
+
+[node name="BuzzerBell" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.48, 0.97, 0.14)
+mesh = SubResource("CylinderMesh_bell")
+surface_material_override/0 = ExtResource("6_brass")
+
+[node name="FrontPlaque" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.45)
+mesh = SubResource("BoxMesh_plaque")
+surface_material_override/0 = ExtResource("3_copper")
+
+[node name="TitleLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.48)
+text = "III. FLITWICK'S STEADY HAND"
+font_size = 20
+outline_size = 4
+modulate = Color(0.1, 0.08, 0.06, 1)
+
+[node name="AccentLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0.15)
+light_color = Color(0.45, 0.7, 1, 1)
+light_energy = 1.25
+omni_range = 4.2
