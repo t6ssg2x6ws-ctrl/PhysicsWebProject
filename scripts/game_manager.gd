@@ -12,15 +12,21 @@ enum MissionState {
 signal state_changed(new_state: int)
 signal quest_progress_changed(collected_count: int, total_count: int)
 signal notification_requested(title: String, message: String, accent: Color)
+signal chamber_sealed_warning_requested
+signal mission_accepted
 signal mission_modal_requested(visible: bool)
 signal camera_shake_requested(intensity: float, duration: float)
 signal mission_station_interacted(station_id: String, step_number: int, station_title: String)
+signal wand_trial_visibility_changed(open: bool)
+signal wand_trial_result_accepted(result: Dictionary)
 
 const TOTAL_PARTS := 3
 
 var state: MissionState = MissionState.EXPLORING_ROOM1
 var collected_parts: Array[String] = []
 var is_modal_open: bool = false
+var wand_trial_open: bool = false
+var _wand_trial_result: Dictionary = {}
 
 
 func _ready() -> void:
@@ -37,6 +43,7 @@ func _ensure_input_actions() -> void:
 		"sprint": [KEY_SHIFT],
 		"interact": [KEY_E],
 		"lumos": [KEY_F],
+		"toggle_controls": [KEY_H],
 		"pause": [KEY_ESCAPE],
 	}
 	for action_name in bindings.keys():
@@ -53,8 +60,27 @@ func reset_game() -> void:
 	state = MissionState.EXPLORING_ROOM1
 	collected_parts.clear()
 	is_modal_open = false
+	_wand_trial_result.clear()
+	if wand_trial_open:
+		set_wand_trial_open(false)
 	emit_signal("state_changed", state)
 	emit_signal("quest_progress_changed", 0, TOTAL_PARTS)
+
+
+func set_wand_trial_open(open: bool) -> void:
+	wand_trial_open = open
+	is_modal_open = open
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE if open else Input.MOUSE_MODE_CAPTURED)
+	wand_trial_visibility_changed.emit(open)
+
+
+func accept_wand_trial_result(result: Dictionary) -> void:
+	_wand_trial_result = result.duplicate()
+	wand_trial_result_accepted.emit(_wand_trial_result.duplicate())
+
+
+func get_wand_trial_result() -> Dictionary:
+	return _wand_trial_result.duplicate()
 
 
 func trigger_room2_lockdown() -> void:
@@ -62,12 +88,7 @@ func trigger_room2_lockdown() -> void:
 		return
 	state = MissionState.TRAPPED_IN_ROOM2
 	emit_signal("state_changed", state)
-	emit_signal(
-		"notification_requested",
-		"THE WARD SEAL SHATTERED",
-		"The iron-oak door slammed shut behind you! Inspect the Enchanted Lectern to accept the repair mission.",
-		Color(0.92, 0.34, 0.28)
-	)
+	chamber_sealed_warning_requested.emit()
 
 
 func request_mission_modal() -> void:
@@ -86,12 +107,7 @@ func accept_mission() -> void:
 		state = MissionState.MISSION_ACTIVE
 		emit_signal("state_changed", state)
 		emit_signal("quest_progress_changed", collected_parts.size(), TOTAL_PARTS)
-		emit_signal(
-			"notification_requested",
-			"MISSION ACCEPTED: CHAMBER OF SECRET CODES",
-			"Complete the 4 Hogwarts Trials step by step, visit the Sorting Hat, and unlock the door.",
-			Color(0.95, 0.78, 0.32)
-		)
+		mission_accepted.emit()
 
 
 func close_mission_modal() -> void:

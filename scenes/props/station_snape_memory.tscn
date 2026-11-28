@@ -77,7 +77,6 @@ script = ExtResource("1_station")
 step_number = 2
 station_id = "snape_memory"
 station_title = "Snape's Memory Trial"
-house_name = "Slytherin"
 station_hint = "Observe the triangular potion light sequence and repeat it on the rune keys."
 accent_color = Color(0.32, 0.9, 0.54, 1)
 
@@ -189,7 +188,7 @@ surface_material_override/0 = ExtResource("3_silver")
 
 [node name="TitleLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.49)
-text = "II. SNAPE'S MEMORY TRIAL"
+text = "SNAPE'S MEMORY TRIAL"
 font_size = 20
 outline_size = 4
 modulate = Color(0.08, 0.14, 0.1, 1)

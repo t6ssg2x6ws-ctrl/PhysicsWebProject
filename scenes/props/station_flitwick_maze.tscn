@@ -83,7 +83,6 @@ script = ExtResource("1_station")
 step_number = 3
 station_id = "flitwick_maze"
 station_title = "Flitwick's Steady Hand Test"
-house_name = "Ravenclaw"
 station_hint = "Guide the conductive wand ring along the enchanted wire without touching it."
 accent_color = Color(0.45, 0.72, 1, 1)
 
@@ -200,7 +199,7 @@ surface_material_override/0 = ExtResource("3_copper")
 
 [node name="TitleLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.48)
-text = "III. FLITWICK'S STEADY HAND"
+text = "FLITWICK'S STEADY HAND"
 font_size = 20
 outline_size = 4
 modulate = Color(0.1, 0.08, 0.06, 1)

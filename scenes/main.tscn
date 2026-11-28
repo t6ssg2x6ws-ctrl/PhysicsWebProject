@@ -125,15 +125,15 @@ surface_material_override/0 = ExtResource("3_oak")
 
 [node name="Door2_ToSnape" parent="." instance=ExtResource("11_cdoor")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
-door_title = "TRIAL II: SNAPE'S MEMORY"
+door_title = "SNAPE'S MEMORY TRIAL"
 
 [node name="Door3_ToFlitwick" parent="." instance=ExtResource("11_cdoor")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21.0)
-door_title = "TRIAL III: FLITWICK'S HAND"
+door_title = "FLITWICK'S STEADY HAND TEST"
 
 [node name="Door4_ToGuess" parent="." instance=ExtResource("11_cdoor")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31.5)
-door_title = "TRIAL IV: GUESS THE NUMBER"
+door_title = "GUESS THE NUMBER"
 
 [node name="Player" parent="." instance=ExtResource("12_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 7.8)
