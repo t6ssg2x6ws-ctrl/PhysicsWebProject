@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/house_banner.gd" id="1_banner"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="2_brass"]
+[ext_resource type="Material" path="res://assets/materials/mat_wrought_iron.tres" id="3_iron"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rod"]
+top_radius = 0.024
+bottom_radius = 0.024
+height = 1.06
+
+[sub_resource type="SphereMesh" id="SphereMesh_finial"]
+radius = 0.042
+height = 0.084
+
+[sub_resource type="BoxMesh" id="BoxMesh_cloth"]
+size = Vector3(0.86, 1.48, 0.028)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tip"]
+size = Vector3(0.42, 0.42, 0.026)
+
+[sub_resource type="BoxMesh" id="BoxMesh_stripe"]
+size = Vector3(0.11, 1.56, 0.032)
+
+[sub_resource type="BoxMesh" id="BoxMesh_crest"]
+size = Vector3(0.28, 0.28, 0.038)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hook"]
+size = Vector3(0.05, 0.14, 0.09)
+
+[node name="HouseBanner" type="Node3D"]
+script = ExtResource("1_banner")
+
+[node name="HookLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.82, 0.04)
+mesh = SubResource("BoxMesh_hook")
+surface_material_override/0 = ExtResource("3_iron")
+
+[node name="HookRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.82, 0.04)
+mesh = SubResource("BoxMesh_hook")
+surface_material_override/0 = ExtResource("3_iron")
+
+[node name="BrassRod" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0.82, 0.08)
+mesh = SubResource("CylinderMesh_rod")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="FinialLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.82, 0.08)
+mesh = SubResource("SphereMesh_finial")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="FinialRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.82, 0.08)
+mesh = SubResource("SphereMesh_finial")
+surface_material_override/0 = ExtResource("2_brass")
+
+[node name="ClothMain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0.08)
+mesh = SubResource("BoxMesh_cloth")
+
+[node name="ClothTipLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, -0.707, 0, 0.707, 0.707, 0, 0, 0, 1, -0.21, -0.68, 0.08)
+mesh = SubResource("BoxMesh_tip")
+
+[node name="ClothTipRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, -0.707, 0, 0.707, 0.707, 0, 0, 0, 1, 0.21, -0.68, 0.08)
+mesh = SubResource("BoxMesh_tip")
+
+[node name="StripeCenter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.085)
+mesh = SubResource("BoxMesh_stripe")
+
+[node name="CrestDiamond" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, -0.707, 0, 0.707, 0.707, 0, 0, 0, 1, 0, 0.14, 0.09)
+mesh = SubResource("BoxMesh_crest")
+
+[node name="HouseLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34, 0.115)
+text = "GRYFFINDOR"
+font_size = 24
+outline_size = 6

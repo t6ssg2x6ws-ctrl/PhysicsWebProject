@@ -1,0 +1,352 @@
+[gd_scene load_steps=36 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/mat_flagstone_floor.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="2_stone"]
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="3_oak"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="4_brass"]
+[ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="5_slate"]
+[ext_resource type="Material" path="res://assets/materials/mat_gryffindor.tres" id="6_gryff"]
+[ext_resource type="Material" path="res://assets/materials/mat_carpet.tres" id="7_carpet"]
+[ext_resource type="Material" path="res://assets/materials/mat_parchment.tres" id="8_parch"]
+[ext_resource type="PackedScene" path="res://scenes/props/wall_sconce.tscn" id="9_sconce"]
+[ext_resource type="PackedScene" path="res://scenes/props/floating_candle.tscn" id="10_candle"]
+[ext_resource type="PackedScene" path="res://scenes/props/chandelier.tscn" id="11_chandelier"]
+[ext_resource type="PackedScene" path="res://scenes/props/house_banner.tscn" id="12_banner"]
+[ext_resource type="PackedScene" path="res://scenes/props/bookshelf.tscn" id="13_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/props/mission_lectern.tscn" id="14_lectern"]
+[ext_resource type="PackedScene" path="res://scenes/props/station_wand_trial.tscn" id="15_station1"]
+[ext_resource type="PackedScene" path="res://scenes/props/prop_voltage_obelisk.tscn" id="16_obelisk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(10.5, 0.4, 10.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(10.5, 0.4, 10.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ew"]
+size = Vector3(0.5, 5.4, 10.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_ew"]
+size = Vector3(0.5, 5.4, 10.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wainscot"]
+size = Vector3(0.08, 1.15, 10.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_beam"]
+size = Vector3(10.2, 0.34, 0.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+size = Vector3(0.54, 5.0, 0.54)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar_cap"]
+size = Vector3(0.7, 0.22, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_runner"]
+size = Vector3(1.8, 0.014, 9.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dais"]
+size = Vector3(2.8, 0.06, 2.4)
+
+[sub_resource type="TorusMesh" id="TorusMesh_dais_ring"]
+inner_radius = 1.65
+outer_radius = 1.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_table"]
+size = Vector3(1.5, 0.85, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_table_top"]
+size = Vector3(1.5, 0.08, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_table_leg"]
+size = Vector3(0.1, 0.78, 0.75)
+
+[sub_resource type="BoxMesh" id="BoxMesh_velvet_pad"]
+size = Vector3(1.1, 0.03, 0.56)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wand"]
+top_radius = 0.008
+bottom_radius = 0.017
+height = 0.38
+
+[sub_resource type="TorusMesh" id="TorusMesh_orrery_ring"]
+inner_radius = 0.24
+outer_radius = 0.27
+
+[sub_resource type="SphereMesh" id="SphereMesh_orrery_sun"]
+radius = 0.09
+height = 0.18
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sun"]
+albedo_color = Color(1, 0.84, 0.35, 1)
+emission_enabled = true
+emission = Color(1, 0.74, 0.2, 1)
+emission_energy_multiplier = 3.2
+
+[node name="RoomMission1_Dumbledore" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("1_floor")
+
+[node name="Ceiling" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.7, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 2.7, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="WainscotWest" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.96, 0.58, 0)
+mesh = SubResource("BoxMesh_wainscot")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="WainscotEast" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.96, 0.58, 0)
+mesh = SubResource("BoxMesh_wainscot")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="Beam1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.82, -3.0)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="Beam2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.82, 0)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="Beam3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.82, 3.0)
+mesh = SubResource("BoxMesh_beam")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="PillarNW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 2.5, -4.75)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarNW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="PillarNE" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 2.5, -4.75)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarNE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="PillarSW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 2.5, 4.75)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarSW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="PillarSE" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 2.5, 4.75)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="Cap" type="MeshInstance3D" parent="PillarSE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("BoxMesh_pillar_cap")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="CarpetRunner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0)
+mesh = SubResource("BoxMesh_runner")
+surface_material_override/0 = ExtResource("7_carpet")
+
+[node name="CenterDais" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+mesh = SubResource("BoxMesh_dais")
+surface_material_override/0 = ExtResource("5_slate")
+
+[node name="DaisRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.12, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("TorusMesh_dais_ring")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="Chandelier" parent="." instance=ExtResource("11_chandelier")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.15, 0)
+
+[node name="SconceW1" parent="." instance=ExtResource("9_sconce")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.96, 2.45, -2.8)
+
+[node name="SconceW2" parent="." instance=ExtResource("9_sconce")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.96, 2.45, 2.8)
+
+[node name="SconceE1" parent="." instance=ExtResource("9_sconce")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.96, 2.45, -2.8)
+
+[node name="SconceE2" parent="." instance=ExtResource("9_sconce")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.96, 2.45, 2.8)
+
+[node name="BannerW" parent="." instance=ExtResource("12_banner")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.96, 2.7, 0)
+house = 0
+
+[node name="BannerE" parent="." instance=ExtResource("12_banner")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.96, 2.7, 0)
+house = 0
+
+[node name="Candle1" parent="." instance=ExtResource("10_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 3.6, -2.0)
+
+[node name="Candle2" parent="." instance=ExtResource("10_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 3.7, -2.0)
+
+[node name="Candle3" parent="." instance=ExtResource("10_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 3.5, 2.0)
+
+[node name="Candle4" parent="." instance=ExtResource("10_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 3.65, 2.0)
+
+[node name="BookshelfNW" parent="." instance=ExtResource("13_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 0, -4.65)
+
+[node name="BookshelfNE" parent="." instance=ExtResource("13_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 0, -4.65)
+
+[node name="MissionLectern" parent="." instance=ExtResource("14_lectern")]
+transform = Transform3D(0.924, 0, 0.383, 0, 1, 0, -0.383, 0, 0.924, -1.9, 0, 2.6)
+
+[node name="Station1_WandTrial" parent="." instance=ExtResource("15_station1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+
+[node name="Obelisk_2V" parent="." instance=ExtResource("16_obelisk")]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, -3.55, 0, -2.8)
+glow_color = Color(1, 0.65, 0.16, 1)
+display_label = "WAND I: ~2V"
+
+[node name="Obelisk_3V" parent="." instance=ExtResource("16_obelisk")]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 3.55, 0, -2.8)
+glow_color = Color(1, 0.88, 0.28, 1)
+display_label = "WAND II: ~3V"
+
+[node name="Obelisk_4V" parent="." instance=ExtResource("16_obelisk")]
+transform = Transform3D(-0.866, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866, 3.55, 0, 2.8)
+glow_color = Color(0.28, 0.95, 0.52, 1)
+display_label = "WAND III: ~4V"
+
+[node name="WandDisplayTable" type="StaticBody3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.1, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_table")
+
+[node name="Top" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.81, 0)
+mesh = SubResource("BoxMesh_table_top")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="LegL" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0.39, 0)
+mesh = SubResource("BoxMesh_table_leg")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="LegR" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.39, 0)
+mesh = SubResource("BoxMesh_table_leg")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="VelvetDisplay" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.865, 0)
+mesh = SubResource("BoxMesh_velvet_pad")
+surface_material_override/0 = ExtResource("6_gryff")
+
+[node name="DisplayWand1" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.32, 0.895, 0)
+mesh = SubResource("CylinderMesh_wand")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="DisplayWand2" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.895, 0)
+mesh = SubResource("CylinderMesh_wand")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="DisplayWand3" type="MeshInstance3D" parent="WandDisplayTable"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.32, 0.895, 0)
+mesh = SubResource("CylinderMesh_wand")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="OrreryTable" type="StaticBody3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.1, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="OrreryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_table")
+
+[node name="Top" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.81, 0)
+mesh = SubResource("BoxMesh_table_top")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="LegL" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0.39, 0)
+mesh = SubResource("BoxMesh_table_leg")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="LegR" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.39, 0)
+mesh = SubResource("BoxMesh_table_leg")
+surface_material_override/0 = ExtResource("3_oak")
+
+[node name="OrreryRingA" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(0.94, 0.342, 0, 0, 0, -1, -0.342, 0.94, 0, 0, 1.15, 0)
+mesh = SubResource("TorusMesh_orrery_ring")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="OrreryRingB" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, 0, 1.15, 0)
+mesh = SubResource("TorusMesh_orrery_ring")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="OrrerySun" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+mesh = SubResource("SphereMesh_orrery_sun")
+surface_material_override/0 = SubResource("StandardMaterial3D_sun")
+
+[node name="OrreryScroll" type="MeshInstance3D" parent="OrreryTable"]
+transform = Transform3D(0.966, 0, -0.259, 0, 1, 0, 0.259, 0, 0.966, 0.45, 0.86, 0.08)
+scale = Vector3(0.32, 0.015, 0.38)
+mesh = SubResource("BoxMesh_table_top")
+surface_material_override/0 = ExtResource("8_parch")

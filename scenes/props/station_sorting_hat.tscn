@@ -1,0 +1,230 @@
+[gd_scene load_steps=27 format=3]
+
+[ext_resource type="Script" path="res://scripts/mission_station.gd" id="1_station"]
+[ext_resource type="Material" path="res://assets/materials/mat_stone_wall.tres" id="2_stone"]
+[ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="3_slate"]
+[ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="4_brass"]
+[ext_resource type="Material" path="res://assets/materials/mat_gryffindor.tres" id="5_gryff"]
+[ext_resource type="Material" path="res://assets/materials/mat_sorting_leather.tres" id="6_leather"]
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="7_oak"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(2.2, 1.85, 1.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_step"]
+size = Vector3(2.25, 0.14, 1.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_altar"]
+size = Vector3(1.65, 0.88, 1.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_trim"]
+size = Vector3(1.72, 0.07, 1.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cushion"]
+size = Vector3(0.76, 0.14, 0.72)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hat_brim"]
+top_radius = 0.34
+bottom_radius = 0.38
+height = 0.045
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hat_cone1"]
+top_radius = 0.17
+bottom_radius = 0.24
+height = 0.24
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hat_cone2"]
+top_radius = 0.085
+bottom_radius = 0.165
+height = 0.26
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hat_tip"]
+top_radius = 0.012
+bottom_radius = 0.08
+height = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_hat_crease"]
+size = Vector3(0.14, 0.032, 0.05)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_corner_post"]
+top_radius = 0.045
+bottom_radius = 0.06
+height = 0.28
+
+[sub_resource type="SphereMesh" id="SphereMesh_house_gem"]
+radius = 0.055
+height = 0.11
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gem_g"]
+albedo_color = Color(0.88, 0.18, 0.18, 1)
+emission_enabled = true
+emission = Color(0.95, 0.2, 0.18, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gem_s"]
+albedo_color = Color(0.14, 0.8, 0.38, 1)
+emission_enabled = true
+emission = Color(0.16, 0.88, 0.42, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gem_r"]
+albedo_color = Color(0.22, 0.52, 0.98, 1)
+emission_enabled = true
+emission = Color(0.24, 0.56, 1, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gem_h"]
+albedo_color = Color(0.96, 0.78, 0.18, 1)
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_plaque"]
+size = Vector3(1.18, 0.18, 0.04)
+
+[sub_resource type="SphereMesh" id="SphereMesh_bt_rune"]
+radius = 0.038
+height = 0.076
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bt_glow"]
+albedo_color = Color(0.28, 0.72, 1, 1)
+emission_enabled = true
+emission = Color(0.28, 0.72, 1, 1)
+emission_energy_multiplier = 3.2
+
+[node name="StationSortingHat" type="Node3D"]
+script = ExtResource("1_station")
+step_number = 5
+station_id = "sorting_hat"
+station_title = "The Sorting Hat"
+house_name = "House Selection"
+station_hint = "Complete all 4 trials to let the Sorting Hat assign your Hogwarts House and unlock the door."
+accent_color = Color(0.98, 0.82, 0.36, 1)
+
+[node name="InteractBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.925, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="StepBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0)
+mesh = SubResource("BoxMesh_step")
+surface_material_override/0 = ExtResource("3_slate")
+
+[node name="AltarBody" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("BoxMesh_altar")
+surface_material_override/0 = ExtResource("2_stone")
+
+[node name="BrassTrimTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03, 0)
+mesh = SubResource("BoxMesh_trim")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="VelvetCushion" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13, 0)
+mesh = SubResource("BoxMesh_cushion")
+surface_material_override/0 = ExtResource("5_gryff")
+
+[node name="SortingHat" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, 0)
+
+[node name="Brim" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(1, 0, 0, 0, 0.996, 0.087, 0, -0.087, 0.996, 0, 0, 0)
+mesh = SubResource("CylinderMesh_hat_brim")
+surface_material_override/0 = ExtResource("6_leather")
+
+[node name="CrownLower" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(0.996, -0.087, 0, 0.087, 0.996, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("CylinderMesh_hat_cone1")
+surface_material_override/0 = ExtResource("6_leather")
+
+[node name="CrownMid" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(0.966, 0.259, 0, -0.259, 0.966, 0, 0, 0, 1, 0.03, 0.32, 0)
+mesh = SubResource("CylinderMesh_hat_cone2")
+surface_material_override/0 = ExtResource("6_leather")
+
+[node name="CrownTip" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(0.866, 0.433, 0.25, -0.45, 0.891, 0, -0.223, -0.112, 0.968, 0.1, 0.49, 0.03)
+mesh = SubResource("CylinderMesh_hat_tip")
+surface_material_override/0 = ExtResource("6_leather")
+
+[node name="BrowLeft" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(0.94, 0.342, 0, -0.342, 0.94, 0, 0, 0, 1, -0.08, 0.17, 0.21)
+mesh = SubResource("BoxMesh_hat_crease")
+surface_material_override/0 = ExtResource("7_oak")
+
+[node name="BrowRight" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(0.94, -0.342, 0, 0.342, 0.94, 0, 0, 0, 1, 0.08, 0.17, 0.21)
+mesh = SubResource("BoxMesh_hat_crease")
+surface_material_override/0 = ExtResource("7_oak")
+
+[node name="MouthFold" type="MeshInstance3D" parent="SortingHat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0.225)
+scale = Vector3(1.4, 0.8, 1)
+mesh = SubResource("BoxMesh_hat_crease")
+surface_material_override/0 = ExtResource("3_slate")
+
+[node name="PillarG" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 1.19, 0.38)
+mesh = SubResource("CylinderMesh_corner_post")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="GemG" type="MeshInstance3D" parent="PillarG"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("SphereMesh_house_gem")
+surface_material_override/0 = SubResource("StandardMaterial3D_gem_g")
+
+[node name="PillarS" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 1.19, -0.38)
+mesh = SubResource("CylinderMesh_corner_post")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="GemS" type="MeshInstance3D" parent="PillarS"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("SphereMesh_house_gem")
+surface_material_override/0 = SubResource("StandardMaterial3D_gem_s")
+
+[node name="PillarR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.19, -0.38)
+mesh = SubResource("CylinderMesh_corner_post")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="GemR" type="MeshInstance3D" parent="PillarR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("SphereMesh_house_gem")
+surface_material_override/0 = SubResource("StandardMaterial3D_gem_r")
+
+[node name="PillarH" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.19, 0.38)
+mesh = SubResource("CylinderMesh_corner_post")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="GemH" type="MeshInstance3D" parent="PillarH"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("SphereMesh_house_gem")
+surface_material_override/0 = SubResource("StandardMaterial3D_gem_h")
+
+[node name="FrontPlaque" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.52)
+mesh = SubResource("BoxMesh_plaque")
+surface_material_override/0 = ExtResource("4_brass")
+
+[node name="BluetoothRune" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0.52)
+mesh = SubResource("SphereMesh_bt_rune")
+surface_material_override/0 = SubResource("StandardMaterial3D_bt_glow")
+
+[node name="TitleLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.55)
+text = "V. THE SORTING HAT"
+font_size = 22
+outline_size = 4
+modulate = Color(0.14, 0.08, 0.03, 1)
+
+[node name="AccentLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0.35)
+light_color = Color(1, 0.84, 0.45, 1)
+light_energy = 1.5
+omni_range = 5.0

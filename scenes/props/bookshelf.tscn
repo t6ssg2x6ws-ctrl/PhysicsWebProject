@@ -1,0 +1,121 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="1_oak"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_shelf"]
+size = Vector3(2.0, 2.5, 0.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back"]
+size = Vector3(1.96, 2.46, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side"]
+size = Vector3(0.08, 2.5, 0.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plank"]
+size = Vector3(1.88, 0.06, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_book_tall"]
+size = Vector3(0.42, 0.36, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crimson_book"]
+albedo_color = Color(0.42, 0.1, 0.1, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="BoxMesh_book_mid"]
+size = Vector3(0.38, 0.31, 0.26)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emerald_book"]
+albedo_color = Color(0.09, 0.28, 0.18, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_navy_book"]
+albedo_color = Color(0.11, 0.16, 0.34, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_book_wide"]
+size = Vector3(0.54, 0.33, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leather_book"]
+albedo_color = Color(0.32, 0.2, 0.12, 1)
+roughness = 0.8
+
+[node name="Bookshelf" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("BoxShape3D_shelf")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -0.21)
+mesh = SubResource("BoxMesh_back")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="LeftSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 1.25, 0)
+mesh = SubResource("BoxMesh_side")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="RightSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 1.25, 0)
+mesh = SubResource("BoxMesh_side")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="Plank4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.47, 0)
+mesh = SubResource("BoxMesh_plank")
+surface_material_override/0 = ExtResource("1_oak")
+
+[node name="BooksRow1A" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.58, 0.93, 0.03)
+mesh = SubResource("BoxMesh_book_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_crimson_book")
+
+[node name="BooksRow1B" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.91, 0.03)
+mesh = SubResource("BoxMesh_book_wide")
+surface_material_override/0 = SubResource("StandardMaterial3D_leather_book")
+
+[node name="BooksRow1C" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.91, 0.03)
+mesh = SubResource("BoxMesh_book_mid")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_book")
+
+[node name="BooksRow2A" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 1.54, 0.03)
+mesh = SubResource("BoxMesh_book_wide")
+surface_material_override/0 = SubResource("StandardMaterial3D_navy_book")
+
+[node name="BooksRow2B" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 1.55, 0.03)
+mesh = SubResource("BoxMesh_book_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_crimson_book")
+
+[node name="BooksRow3A" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 2.15, 0.03)
+mesh = SubResource("BoxMesh_book_mid")
+surface_material_override/0 = SubResource("StandardMaterial3D_emerald_book")
+
+[node name="BooksRow3B" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 2.16, 0.03)
+mesh = SubResource("BoxMesh_book_tall")
+surface_material_override/0 = SubResource("StandardMaterial3D_leather_book")
