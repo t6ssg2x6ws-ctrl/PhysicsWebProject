@@ -1,22 +1,17 @@
 ## keypad_guess.gd
-## Attached to StationGuessSpell (station_guess_spell.tscn).
+## Attached to StationGuessSpell in station_guess_spell.tscn.
 ##
-## Mechanics
-##   • Extends Interactable so the player can walk up and press [E] to activate.
-##   • After activation the mouse stays CAPTURED (first-person look).
-##   • Left-click on a 3-D key → digit appended / clear / enter.
-##   • OLED Label3D beside the keypad shows the digits being typed.
-##   • 3 tries to guess the secret number (0-100 inclusive).
-##   • Wrong guess → parchment-scroll popup with hint + tries left + "Try Again".
-##   • Game over or win → different parchment message.
-##   • No backend – pure GDScript.
+## ──────────────────────────────────────────────────────────────────────────────
+## The parchment popup is built ENTIRELY in GDScript (no .tscn popup scene needed)
+## and injected into a CanvasLayer so it renders correctly over the 3-D world.
+## ──────────────────────────────────────────────────────────────────────────────
 extends Interactable
 
 # ── tunables ──────────────────────────────────────────────────────────────────
 const MAX_TRIES   := 3
 const NUM_MIN     := 0
 const NUM_MAX     := 100
-const CLICK_RANGE := 3.5          # metres — how far a key can be aimed at
+const CLICK_RANGE := 3.5
 
 # ── game state ────────────────────────────────────────────────────────────────
 var secret_number : int    = 0
@@ -25,47 +20,47 @@ var current_input : String = ""
 var game_active   : bool   = false
 var solved        : bool   = false
 
-# ── key-name → action map ─────────────────────────────────────────────────────
+# ── key-name → action ─────────────────────────────────────────────────────────
 const KEY_MAP : Dictionary = {
 	"K_0": "0", "K_1": "1", "K_2": "2", "K_3": "3",
 	"K_4": "4", "K_5": "5", "K_6": "6", "K_7": "7",
 	"K_8": "8", "K_9": "9",
-	"K_Hash": "ENTER",   # gold key  → submit
-	"K_Star": "CLR",     # red key   → clear all
+	"K_Hash": "ENTER",
+	"K_Star": "CLR",
 }
 
-# ── node refs (paths relative to StationGuessSpell root) ─────────────────────
-@onready var oled_text   : Label3D       = $ConsoleSlope/OledBezel/OledText
-@onready var parchment   : Control       = $ParchmentPopup
-@onready var parch_msg   : RichTextLabel = $ParchmentPopup/ParchmentPanel/VBox/Message
-@onready var parch_tries : Label         = $ParchmentPopup/ParchmentPanel/VBox/TriesLabel
-@onready var try_btn     : Button        = $ParchmentPopup/ParchmentPanel/VBox/TryAgainBtn
-
-# filled in _ready by searching the scene tree
-var camera : Camera3D = null
-
-# 3-D key meshes — built from KeypadPad children at runtime
-var key_nodes : Dictionary = {}   # String name → MeshInstance3D
+# ── 3-D key meshes ────────────────────────────────────────────────────────────
+var key_nodes : Dictionary = {}
+var camera    : Camera3D   = null
 
 # press-dip animation
-var pressed_key  : MeshInstance3D = null
-var press_timer  : float          = 0.0
-const PRESS_DIP  : float = 0.006   # metres
-const PRESS_HOLD : float = 0.12    # seconds
+var pressed_key : MeshInstance3D = null
+var press_timer : float          = 0.0
+const PRESS_DIP  : float = 0.006
+const PRESS_HOLD : float = 0.12
+
+# ── OLED node ref (3-D world) ─────────────────────────────────────────────────
+@onready var oled_text : Label3D = $ConsoleSlope/OledBezel/OledText
+
+# ── Parchment popup nodes (built in code, live in a CanvasLayer) ───────────────
+var _canvas_layer  : CanvasLayer   = null
+var _parch_root    : Control       = null   # the whole overlay
+var _msg_label     : Label         = null
+var _crosses_label : Label         = null
+var _tries_label   : Label         = null
+var _btn           : Button        = null
+var _win_mode      : bool          = false
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 func _ready() -> void:
 	_collect_key_nodes()
-
-	# parchment starts hidden
-	parchment.visible = false
-	try_btn.pressed.connect(_on_try_again_pressed)
-
-	_start_new_game()
 	_find_camera()
+	_build_popup()
+	_start_new_game()
 
 
+# ── collect clickable key meshes ──────────────────────────────────────────────
 func _collect_key_nodes() -> void:
 	var pad := get_node_or_null("ConsoleSlope/KeypadPad")
 	if pad == null:
@@ -75,18 +70,160 @@ func _collect_key_nodes() -> void:
 			key_nodes[child.name] = child
 
 
+# ── find the first-person camera ──────────────────────────────────────────────
 func _find_camera() -> void:
-	# Walk the tree looking for the player's Camera3D
 	var root := get_tree().get_root()
-	# Try common names first
-	for player_name in ["Player", "PlayerController", "CharacterBody3D"]:
-		var player := root.find_child(player_name, true, false)
-		if player:
-			camera = player.find_child("Camera3D", true, false) as Camera3D
+	for pname in ["Player", "PlayerController", "CharacterBody3D"]:
+		var p := root.find_child(pname, true, false)
+		if p:
+			camera = p.find_child("Camera3D", true, false) as Camera3D
 			if camera:
 				return
-	# Fallback: grab any Camera3D
 	camera = root.find_child("Camera3D", true, false) as Camera3D
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Build the full parchment popup purely in GDScript.
+# A CanvasLayer is added to the scene root so the Control renders over 3-D.
+# ══════════════════════════════════════════════════════════════════════════════
+func _build_popup() -> void:
+	# ── CanvasLayer (renders over everything) ─────────────────────────────────
+	_canvas_layer = CanvasLayer.new()
+	_canvas_layer.layer = 10
+	get_tree().get_root().call_deferred("add_child", _canvas_layer)
+	await get_tree().process_frame   # wait for add_child to complete
+
+	# ── Dark dimmer (full screen) ──────────────────────────────────────────────
+	_parch_root = Control.new()
+	_parch_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_parch_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_parch_root.visible = false
+	_canvas_layer.add_child(_parch_root)
+
+	var dimmer := ColorRect.new()
+	dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dimmer.color = Color(0.04, 0.02, 0.01, 0.80)
+	_parch_root.add_child(dimmer)
+
+	# ── Parchment panel (centred in screen) ────────────────────────────────────
+	var panel := PanelContainer.new()
+	# Anchor to screen centre, then offset by half the panel size to truly centre it
+	panel.anchor_left   = 0.5
+	panel.anchor_top    = 0.5
+	panel.anchor_right  = 0.5
+	panel.anchor_bottom = 0.5
+	panel.custom_minimum_size = Vector2(500, 340)
+	panel.offset_left   = -250.0
+	panel.offset_top    = -170.0
+	panel.offset_right  =  250.0
+	panel.offset_bottom =  170.0
+	# parchment look via StyleBoxFlat
+	var sbox := StyleBoxFlat.new()
+	sbox.bg_color             = Color(0.878, 0.812, 0.671, 1.0)
+	sbox.border_width_left    = 7
+	sbox.border_width_top     = 7
+	sbox.border_width_right   = 7
+	sbox.border_width_bottom  = 7
+	sbox.border_color         = Color(0.388, 0.242, 0.09, 1)
+	sbox.corner_radius_top_left     = 6
+	sbox.corner_radius_top_right    = 6
+	sbox.corner_radius_bottom_right = 6
+	sbox.corner_radius_bottom_left  = 6
+	sbox.shadow_color = Color(0.05, 0.03, 0.01, 0.75)
+	sbox.shadow_size  = 28
+	panel.add_theme_stylebox_override("panel", sbox)
+	_parch_root.add_child(panel)
+
+	# ── VBox inside panel ──────────────────────────────────────────────────────
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 20)
+	panel.add_child(vbox)
+
+	# margin padding
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left",   40)
+	margin.add_theme_constant_override("margin_right",  40)
+	margin.add_theme_constant_override("margin_top",    30)
+	margin.add_theme_constant_override("margin_bottom", 30)
+	panel.add_child(margin)
+
+	var inner := VBoxContainer.new()
+	inner.alignment = BoxContainer.ALIGNMENT_CENTER
+	inner.add_theme_constant_override("separation", 20)
+	margin.add_child(inner)
+
+	# ── Message ────────────────────────────────────────────────────────────────
+	_msg_label = Label.new()
+	_msg_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_msg_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_msg_label.add_theme_font_size_override("font_size", 24)
+	_msg_label.add_theme_color_override("font_color", Color(0.14, 0.08, 0.03, 1))
+	inner.add_child(_msg_label)
+
+	# ── Crosses (try indicators) ───────────────────────────────────────────────
+	_crosses_label = Label.new()
+	_crosses_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_crosses_label.add_theme_font_size_override("font_size", 34)
+	_crosses_label.add_theme_color_override("font_color", Color(0.55, 0.14, 0.08, 1))
+	inner.add_child(_crosses_label)
+
+	# ── Tries remaining ───────────────────────────────────────────────────────
+	_tries_label = Label.new()
+	_tries_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_tries_label.add_theme_font_size_override("font_size", 18)
+	_tries_label.add_theme_color_override("font_color", Color(0.3, 0.18, 0.06, 1))
+	inner.add_child(_tries_label)
+
+	# ── Button (wood style) ────────────────────────────────────────────────────
+	_btn = Button.new()
+	_btn.custom_minimum_size = Vector2(260, 54)
+	_btn.add_theme_font_size_override("font_size", 22)
+	_btn.add_theme_color_override("font_color", Color(0.95, 0.88, 0.72, 1))
+	_btn.add_theme_color_override("font_hover_color", Color(1, 1, 0.9, 1))
+	# normal style
+	var btn_n := StyleBoxFlat.new()
+	btn_n.bg_color           = Color(0.192, 0.133, 0.075, 1)
+	btn_n.border_width_left  = 3
+	btn_n.border_width_top   = 3
+	btn_n.border_width_right = 3
+	btn_n.border_width_bottom = 3
+	btn_n.border_color       = Color(0.588, 0.431, 0.196, 1)
+	btn_n.corner_radius_top_left     = 8
+	btn_n.corner_radius_top_right    = 8
+	btn_n.corner_radius_bottom_right = 8
+	btn_n.corner_radius_bottom_left  = 8
+	btn_n.shadow_color = Color(0.0, 0.0, 0.0, 0.5)
+	btn_n.shadow_size  = 6
+	_btn.add_theme_stylebox_override("normal",  btn_n)
+	# hover style
+	var btn_h := StyleBoxFlat.new()
+	btn_h.bg_color           = Color(0.282, 0.192, 0.098, 1)
+	btn_h.border_width_left  = 3
+	btn_h.border_width_top   = 3
+	btn_h.border_width_right = 3
+	btn_h.border_width_bottom = 3
+	btn_h.border_color       = Color(0.72, 0.56, 0.24, 1)
+	btn_h.corner_radius_top_left     = 8
+	btn_h.corner_radius_top_right    = 8
+	btn_h.corner_radius_bottom_right = 8
+	btn_h.corner_radius_bottom_left  = 8
+	_btn.add_theme_stylebox_override("hover",   btn_h)
+	# pressed style
+	var btn_p := StyleBoxFlat.new()
+	btn_p.bg_color           = Color(0.12, 0.08, 0.04, 1)
+	btn_p.border_width_left  = 3
+	btn_p.border_width_top   = 3
+	btn_p.border_width_right = 3
+	btn_p.border_width_bottom = 3
+	btn_p.border_color       = Color(0.45, 0.32, 0.12, 1)
+	btn_p.corner_radius_top_left     = 8
+	btn_p.corner_radius_top_right    = 8
+	btn_p.corner_radius_bottom_right = 8
+	btn_p.corner_radius_bottom_left  = 8
+	_btn.add_theme_stylebox_override("pressed", btn_p)
+	inner.add_child(_btn)
+	_btn.pressed.connect(_on_popup_btn_pressed)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -96,7 +233,7 @@ func get_prompt() -> String:
 	if solved:
 		return "✦ Cipher Solved"
 	if game_active:
-		return "[LMB] Click keys • [E] Focus keypad"
+		return "[LMB] Click keys  •  [E] Focus"
 	return "[E] Approach the Cipher Keypad"
 
 
@@ -109,19 +246,16 @@ func interact(_player: Node3D) -> void:
 		return
 	if not game_active:
 		_start_new_game()
-	# Player is now focused on the keypad – nothing else to do;
-	# clicks are handled in _unhandled_input below.
 	GameManager.emit_signal(
 		"notification_requested",
 		"TOM RIDDLE'S CIPHER",
-		"Click the brass keys to type a number (0-100), then press ↵ to guess.",
+		"Click the brass keys to type a number (0–100), then press ↵ to guess.",
 		Color(0.95, 0.82, 0.32)
 	)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 func _process(delta: float) -> void:
-	# Animate key-press dip
 	if pressed_key != null:
 		press_timer -= delta
 		if press_timer <= 0.0:
@@ -132,11 +266,10 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not game_active or solved:
 		return
-	if parchment.visible:
+	if _parch_root != null and _parch_root.visible:
 		return
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
 		return
-
 	if event is InputEventMouseButton \
 			and event.button_index == MOUSE_BUTTON_LEFT \
 			and event.pressed:
@@ -144,43 +277,39 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Raycast → closest key
-# ══════════════════════════════════════════════════════════════════════════════
 func _try_click_key() -> void:
 	if camera == null:
 		_find_camera()
 		if camera == null:
 			return
 
-	var vp     := get_viewport()
-	var center := vp.get_visible_rect().size * 0.5
+	var center  := get_viewport().get_visible_rect().size * 0.5
 	var ray_org := camera.project_ray_origin(center)
 	var ray_dir := camera.project_ray_normal(center)
 
 	var closest_key  : String = ""
-	var closest_dist : float  = 0.055   # half key-width tolerance
+	var closest_dist : float  = 0.055
 
-	for key_name in key_nodes:
-		var km      : MeshInstance3D = key_nodes[key_name]
-		var kpos    : Vector3        = km.global_position
-		var to_key  : Vector3        = kpos - ray_org
-		var proj    : float          = to_key.dot(ray_dir)
+	for kname in key_nodes:
+		var km : MeshInstance3D = key_nodes[kname]
+		var to_key := km.global_position - ray_org
+		var proj   := to_key.dot(ray_dir)
 		if proj < 0.0 or proj > CLICK_RANGE:
 			continue
 		var perp := (to_key - ray_dir * proj).length()
 		if perp < closest_dist:
 			closest_dist = perp
-			closest_key  = key_name
+			closest_key  = kname
 
 	if closest_key != "":
 		_animate_press(closest_key)
 		_handle_key(KEY_MAP[closest_key])
 
 
-func _animate_press(key_name: String) -> void:
+func _animate_press(kname: String) -> void:
 	if pressed_key != null:
-		return   # already animating another key
-	var km := key_nodes.get(key_name) as MeshInstance3D
+		return
+	var km := key_nodes.get(kname) as MeshInstance3D
 	if km == null:
 		return
 	pressed_key = km
@@ -188,8 +317,6 @@ func _animate_press(key_name: String) -> void:
 	km.position.y -= PRESS_DIP
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Key logic
 # ══════════════════════════════════════════════════════════════════════════════
 func _handle_key(value: String) -> void:
 	match value:
@@ -210,8 +337,6 @@ func _refresh_oled() -> void:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Guess evaluation
-# ══════════════════════════════════════════════════════════════════════════════
 func _submit_guess() -> void:
 	if current_input == "":
 		return
@@ -220,69 +345,68 @@ func _submit_guess() -> void:
 	_refresh_oled()
 
 	if guess == secret_number:
-		_show_parchment_win()
+		_show_popup_win()
 	else:
 		tries_left -= 1
-		if tries_left <= 0:
-			_show_parchment_wrong(guess, true)
-		else:
-			_show_parchment_wrong(guess, false)
+		_show_popup_wrong(guess, tries_left <= 0)
 
 
-func _show_parchment_win() -> void:
+func _show_popup(msg: String, crosses: String, tries_txt: String, btn_txt: String, win: bool) -> void:
+	if _parch_root == null:
+		return
+	_msg_label.text     = msg
+	_crosses_label.text = crosses
+	_tries_label.text   = tries_txt
+	_btn.text           = btn_txt
+	_win_mode           = win
+	_parch_root.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	parchment.visible = true
-	parch_msg.text  = (
-		"[center][b]✦ Correct! ✦[/b]\n\nThe number was [b]%d[/b].\n"
-		+ "The cipher runes unlock![/center]"
-	) % secret_number
-	parch_tries.text = ""
-	try_btn.text     = "✦  Seal the Cipher"
-	# swap signal for the win button
-	if try_btn.pressed.is_connected(_on_try_again_pressed):
-		try_btn.pressed.disconnect(_on_try_again_pressed)
-	if not try_btn.pressed.is_connected(_on_win_pressed):
-		try_btn.pressed.connect(_on_win_pressed)
 
 
-func _show_parchment_wrong(guess: int, game_over: bool) -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	parchment.visible = true
+func _show_popup_win() -> void:
+	_show_popup(
+		"CORRECT!\nYOU UNLOCKED IT!",
+		"★  ★  ★",
+		"CIPHER BROKEN",
+		"CONTINUE",
+		true
+	)
 
-	var hint := "too low…" if guess < secret_number else "too high…"
-	if game_over:
-		parch_msg.text = (
-			"[center][b]The runes fade…[/b]\n\n"
-			+ "Your guess of [b]%d[/b] was %s\n"
-			+ "The number was [b]%d[/b].[/center]"
-		) % [guess, hint, secret_number]
-		parch_tries.text = "No tries remaining."
-		try_btn.text     = "⟳  Try Again (New Game)"
+
+func _show_popup_wrong(guess: int, game_over: bool) -> void:
+	var hint   := "THE NUMBER IS TOO LOW.\nTRY HIGHER." if guess < secret_number \
+				else "THE NUMBER IS TOO HIGH.\nTRY LOWER."
+	var crosses := _make_crosses(tries_left)
+	var tries_txt := "OUT OF TRIES!" if game_over else "%d TRIES LEFT" % tries_left
+	var msg := hint if not game_over else "OUT OF TRIES!\nThe number was %d." % secret_number
+	_show_popup(msg, crosses, tries_txt, "TRY AGAIN", false)
+
+
+func _make_crosses(remaining: int) -> String:
+	# X marks used tries (left), O marks remaining tries (right)
+	# 3 left (0 used) → ○ ○ ○
+	# 2 left (1 used) → ✗ ○ ○
+	# 1 left (2 used) → ✗ ✗ ○
+	# 0 left (3 used) → ✗ ✗ ✗
+	var used  := MAX_TRIES - remaining
+	var parts : Array[String] = []
+	for i in range(MAX_TRIES):
+		parts.append("✗" if i < used else "○")
+	return "  ".join(parts)
+
+
+func _on_popup_btn_pressed() -> void:
+	_parch_root.visible = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if _win_mode:
+		solved      = true
+		game_active = false
+		oled_text.text = "SOLVED  ✦\nWell done!"
+		GameManager.collect_part("Cipher Riddle")
 	else:
-		parch_msg.text = (
-			"[center][b]Wrong![/b]\n\n"
-			+ "%d is %s[/center]"
-		) % [guess, hint]
-		parch_tries.text = "Tries left: %d" % tries_left
-		try_btn.text     = "Try Again"
-
-
-func _on_try_again_pressed() -> void:
-	parchment.visible = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if tries_left <= 0:
-		_start_new_game()
-	_refresh_oled()
-
-
-func _on_win_pressed() -> void:
-	parchment.visible = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	solved     = true
-	game_active = false
-	oled_text.text = "SOLVED  ✦\nWell done!"
-	# Award the quest part via GameManager
-	GameManager.collect_part("Cipher Riddle")
+		if tries_left <= 0:
+			_start_new_game()
+		_refresh_oled()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -293,3 +417,9 @@ func _start_new_game() -> void:
 	game_active   = true
 	solved        = false
 	_refresh_oled()
+
+
+func _exit_tree() -> void:
+	# Clean up the CanvasLayer when the station is unloaded
+	if _canvas_layer and is_instance_valid(_canvas_layer):
+		_canvas_layer.queue_free()

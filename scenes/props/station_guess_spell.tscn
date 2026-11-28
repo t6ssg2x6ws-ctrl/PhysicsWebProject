@@ -1,11 +1,10 @@
-[gd_scene format=3 uid="uid://station_guess_spell_m4"]
+[gd_scene format=3]
 
 [ext_resource type="Script"  path="res://scripts/keypad_guess.gd"           id="1_keypad"]
 [ext_resource type="Material" path="res://assets/materials/mat_oak_wood.tres" id="2_oak"]
 [ext_resource type="Material" path="res://assets/materials/mat_aged_brass.tres" id="3_brass"]
 [ext_resource type="Material" path="res://assets/materials/mat_hufflepuff.tres" id="4_huff"]
 [ext_resource type="Material" path="res://assets/materials/mat_dark_slate.tres" id="5_slate"]
-[ext_resource type="PackedScene" path="res://scenes/ui/parchment_popup.tscn" id="6_popup"]
 
 ; ── Tom Riddle / old-quill system font ───────────────────────────────────────
 [sub_resource type="SystemFont" id="SystemFont_riddle"]
@@ -124,8 +123,9 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.036, 0)
 text = "GUESS  0–100
 INPUT: _"
 font = SubResource("SystemFont_riddle")
-font_size = 18
-outline_size = 3
+font_size = 36
+pixel_size = 0.001
+outline_size = 2
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 ; ── Keypad (RIGHT side of console) ───────────────────────────────────────────
@@ -144,8 +144,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "1"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_2" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -157,8 +158,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "2"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_3" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -170,8 +172,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "3"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_Star" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -183,8 +186,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_red")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "CLR"
 font = SubResource("SystemFont_riddle")
-font_size = 13
-outline_size = 2
+font_size = 22
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.9, 0.9, 0.9, 1)
 
 ; Row 2 ── 4  5  6  [DEL]
@@ -197,8 +201,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "4"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_5" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -210,8 +215,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "5"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_6" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -223,8 +229,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "6"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_A" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -242,8 +249,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "7"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_8" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -255,8 +263,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "8"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_9" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -268,8 +277,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "9"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_B" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -292,8 +302,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_blue")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "0"
 font = SubResource("SystemFont_riddle")
-font_size = 20
-outline_size = 2
+font_size = 34
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.169, 0.118, 0.078, 1)
 
 [node name="K_Hash" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -305,8 +316,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_key_enter")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.018, 0)
 text = "↵"
 font = SubResource("SystemFont_riddle")
-font_size = 16
-outline_size = 2
+font_size = 26
+pixel_size = 0.001
+outline_size = 1
 modulate = Color(0.95, 0.88, 0.72, 1)
 
 [node name="K_D" type="MeshInstance3D" parent="ConsoleSlope/KeypadPad"]
@@ -345,6 +357,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0.15)
 light_color = Color(0.98, 0.82, 0.36, 1)
 light_energy = 1.25
 omni_range = 4.2
-
-; ── Parchment popup (instanced from UI scene, hidden by default) ───────────────
-[node name="ParchmentPopup" parent="." instance=ExtResource("6_popup")]

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://parchment_popup_m4"]
+[gd_scene format=3]
 
 ; ── Tom Riddle / old-quill system font ───────────────────────────────────────
 [sub_resource type="SystemFont" id="SystemFont_riddle"]
